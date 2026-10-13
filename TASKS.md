@@ -85,16 +85,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 5: BOOKING API & XỬ LÝ LỖI (GATE: RETRY & RACE TESTS)
-- [ ] **TASK-05.1: Booking Creation API với Idempotency Key**
+- [x] **TASK-05.1: Booking Creation API với Idempotency Key**
   - **Requirement IDs:** `DB-02`, `BOOK-04`, `BOOK-08`
-  - **Mô tả:** API tạo đặt phòng yêu cầu `Idempotency-Key` header, lưu trạng thái request để xử lý mạng chập chờn/double-click.
-  - **Tiêu chí nghiệm thu:** Gửi 2 request cùng idempotency key chỉ sinh đúng 1 booking và trả cùng một kết quả.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-05.2: State Machine cho Booking, Hủy phòng & Giải phóng Tồn kho**
+  - **Mô tả:** API tạo đặt phòng yêu cầu `Idempotency-Key` header, lưu trạng thái request để xử lý mạng chập chờn/double-click. Sinh mã đặt phòng thượng lưu `AN-YYYYMM-XXXX`.
+  - **Tiêu chí nghiệm thu:** Gửi nhiều request cùng idempotency key chỉ sinh đúng 1 booking, không trừ trùng tồn kho và trả cùng một kết quả.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/booking.service.ts`, `src/app/api/bookings/route.ts`, `src/app/api/bookings/[code]/route.ts`, `tests/booking-idempotency.test.mjs`.
+  - **Test Evidence:** Test suite `tests/booking-idempotency.test.mjs`: Gửi 3 requests cùng 1 key $\rightarrow$ Đúng 1 booking được tạo, 2 requests sau trả về trùng mã đặt phòng, tồn kho không bị trừ trùng.
+- [x] **TASK-05.2: State Machine cho Booking, Hủy phòng & Giải phóng Tồn kho**
   - **Requirement IDs:** `BOOK-05`, `BOOK-06`
-  - **Mô tả:** Xây dựng máy trạng thái (`CONFIRMED`, `CHECKED_IN`, `CHECKED_OUT`, `CANCELLED`, `NO_SHOW`). Khi hủy phòng, hoàn trả tồn kho tương ứng trong atomic transaction.
+  - **Mô tả:** Xây dựng máy trạng thái (`CONFIRMED`, `CHECKED_IN`, `CHECKED_OUT`, `CANCELLED`, `NO_SHOW`). Khi hủy phòng, hoàn trả tồn kho tương ứng trong atomic transaction (`releaseInventoryAtomic`). Chặn các hành vi chuyển trạng thái trái phép.
   - **Tiêu chí nghiệm thu:** Hủy phòng đồng thời với đặt mới không làm âm hoặc sai lệch tồn kho.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/booking.service.ts`, `src/app/api/bookings/[code]/cancel/route.ts`, `tests/booking-idempotency.test.mjs`.
+  - **Test Evidence:** 4/4 test cases pass: Chuyển đổi trạng thái hợp lệ, chặn hủy đơn đã CHECKED_OUT/CANCELLED, và xử lý mượt mà kịch bản Race Condition giữa Hủy phòng & Đặt phòng mới.
 
 ---
 

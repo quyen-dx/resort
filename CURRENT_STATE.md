@@ -13,17 +13,20 @@
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
-- [x] **Roadmap Giai đoạn 4 (Inventory Transaction Engine & Race-Safety):**
-  - Xây dựng [src/server/services/inventory.service.ts](file:///d:/resort/src/server/services/inventory.service.ts):
-    - Thuật toán `calculateStayNights`: kiểm tra ranh giới ngày, loại trừ ngày checkout (`BOOK-01`).
-    - API kiểm tra tính khả dụng `checkAvailability` và route `/api/rooms/availability`.
-    - Trái tim chống Overbooking: `reserveInventoryAtomic` thực hiện atomic conditional update trong transaction (`availableCount >= quantity`).
-    - Tuân thủ quy tắc bất biến: **"First successful atomic commit wins"** (`BOOK-02`, `BOOK-03`).
-    - Hàm giải phóng tồn kho nguyên tử `releaseInventoryAtomic` cho quy trình hủy phòng (`BOOK-06`).
-  - Bộ kiểm thử Concurrency Gate Test [tests/inventory-concurrency.test.mjs](file:///d:/resort/tests/inventory-concurrency.test.mjs):
-    - 5/5 unit tests kiểm chứng ranh giới ngày lưu trú.
-    - 2/2 concurrency stress tests: 50 requests đồng thời tranh nhau 1 phòng cuối cùng (`Inventory = 1`) $\rightarrow$ Chính xác 1 request thành công, 49 requests nhận `SOLD_OUT`, tồn kho bảo toàn 100%, ZERO overbooking!
-  - Toàn bộ test suite: **16/16 test cases PASS (100%)**.
+- [x] **Roadmap Giai đoạn 5 (Booking API & Idempotency Engine):**
+  - Xây dựng [src/server/services/booking.service.ts](file:///d:/resort/src/server/services/booking.service.ts):
+    - Hỗ trợ `Idempotency-Key` (chống double-click/mạng lag, bảo toàn tồn kho khi retry) (`DB-02`, `BOOK-04`).
+    - Thực thi Atomic Transaction: Đặt tồn kho + Tạo Booking + Khởi tạo cuốc xe đưa đón (nếu có) + Ghi AuditLog.
+    - Cơ chế sinh mã đặt phòng chuẩn resort `AN-YYYYMM-XXXX`.
+    - Triển khai State Machine đầy đủ: `CONFIRMED` $\rightarrow$ `CHECKED_IN` $\rightarrow$ `CHECKED_OUT` (hoặc `CANCELLED`, `NO_SHOW`).
+    - Logic hủy phòng kết nối với `releaseInventoryAtomic` để hoàn trả tồn kho tức thời (`BOOK-06`).
+    - Gán phòng vật lý khi Check-in với DB constraint chống gán trùng phòng cùng kỳ (`BOOK-07`).
+  - Xây dựng các Route Handlers:
+    - `POST /api/bookings`: Tạo đơn đặt phòng có hỗ trợ `Idempotency-Key` header.
+    - `GET /api/bookings/[code]`: Xem chi tiết đơn đặt phòng với Anti-IDOR check.
+    - `POST /api/bookings/[code]/cancel`: Hủy đặt phòng và hoàn trả tồn kho nguyên tử.
+  - Bộ kiểm thử Idempotency & State Machine [tests/booking-idempotency.test.mjs](file:///d:/resort/tests/booking-idempotency.test.mjs): 5/5 tests PASS.
+  - Toàn bộ hệ thống: **21/21 test cases PASS (100%)**, Next.js build hoàn thành 9/9 routes.
 
 ---
 
@@ -31,33 +34,36 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [src/server/services/inventory.service.ts](file:///d:/resort/src/server/services/inventory.service.ts) | Service quản lý tồn kho theo đêm & atomic conditional decrement |
-| [src/app/api/rooms/availability/route.ts](file:///d:/resort/src/app/api/rooms/availability/route.ts) | API kiểm tra tính khả dụng phòng theo ngày |
-| [tests/inventory-concurrency.test.mjs](file:///d:/resort/tests/inventory-concurrency.test.mjs) | Bộ kiểm thử Concurrency Gate Test (`Inventory = 1`) |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 4 |
+| [src/server/services/booking.service.ts](file:///d:/resort/src/server/services/booking.service.ts) | Service quản lý đặt phòng, Idempotency, State Machine và hủy phòng |
+| [src/app/api/bookings/route.ts](file:///d:/resort/src/app/api/bookings/route.ts) | API tạo đặt phòng với Idempotency header |
+| [src/app/api/bookings/[code]/route.ts](file:///d:/resort/src/app/api/bookings/[code]/route.ts) | API xem chi tiết đặt phòng (Anti-IDOR) |
+| [src/app/api/bookings/[code]/cancel/route.ts](file:///d:/resort/src/app/api/bookings/[code]/cancel/route.ts) | API hủy phòng và hoàn trả tồn kho |
+| [tests/booking-idempotency.test.mjs](file:///d:/resort/tests/booking-idempotency.test.mjs) | Bộ kiểm thử Idempotency retry, State Machine và Parallel Cancellation |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 5 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Full Test Suite:** `node --test tests/auth-rbac.test.mjs tests/inventory-concurrency.test.mjs` $\rightarrow$ **16/16 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ 8/8 routes biên dịch thành công.
+- **Full Test Suite:** 3 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`) $\rightarrow$ **21/21 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ 9/9 routes biên dịch thành công.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần tích hợp `Idempotency-Key` ở tầng API tạo booking (Giai đoạn 5) để tránh double-booking khi client retry.
+- Cần xây dựng giao diện người dùng trực quan cao cấp (Customer UI) để khách hàng trải nghiệm toàn bộ luồng tìm kiếm và đặt phòng mượt mà.
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 5: Booking API & Idempotency (`DB-02`, `BOOK-04`, `BOOK-05`, `BOOK-06`):**
-  - Xây dựng Booking Creation Service với xử lý `Idempotency-Key`.
-  - Triển khai State Machine cho Booking: `CONFIRMED` $\rightarrow$ `CHECKED_IN` $\rightarrow$ `CHECKED_OUT` (hoặc `CANCELLED`, `NO_SHOW`).
-  - Logic hủy phòng kết nối với `releaseInventoryAtomic` để hoàn trả tồn kho tức thời.
-  - Viết bài kiểm thử Idempotency retry và Race condition giữa Hủy phòng & Đặt phòng mới.
+- **Roadmap Giai đoạn 6: Customer UI Flow (`PERF-01`, `PERF-02`):**
+  - Xây dựng Design System Components cao cấp: Thanh tìm kiếm chọn ngày (`DateRangePicker`), Card phòng nghỉ dưỡng với hình ảnh sang trọng, Modal chi tiết phòng, Tóm tắt giá và Form xác nhận đặt phòng.
+  - Xây dựng trang danh sách phòng `/rooms` và trang chi tiết `/rooms/[id]`.
+  - Tích hợp gọi API `/api/rooms/availability` và `/api/bookings` với Idempotency Key tự sinh từ client.
+  - Tối ưu hiệu năng Core Web Vitals, skeleton loading và trạng thái lỗi.
+
 
 
 
