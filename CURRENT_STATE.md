@@ -21,6 +21,7 @@
   - Tạo CSS tokens Design System cho resort và tiền ích format tiền VND (`integer`), format ngày VN.
   - Xây dựng tài liệu định nghĩa mô hình tải và SLO Benchmark [workload_specification.md](file:///d:/resort/docs/workload_specification.md) (`SCALE-01`, `AI-03`).
   - Build test kiểm chứng: `npm run build` thành công 100%.
+  - Khởi tạo Git repository và đồng bộ an toàn lên GitHub: `https://github.com/quyen-dx/resort.git`.
 
 ---
 
