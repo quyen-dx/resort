@@ -1,0 +1,251 @@
+.mobileWrapper {
+  min-height: 100vh;
+  background-color: #f7f9f8;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileHeader {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+
+.brand {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.driverRoleBadge {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+}
+
+.contentContainer {
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.25rem;
+  flex: 1;
+}
+
+.driverSelectorBox {
+  background-color: white;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.driverLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.driverSelect {
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  background-color: white;
+}
+
+.tripCard {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+  position: relative;
+}
+
+.tripCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.rideCode {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.pickupTime {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.passengerBox {
+  background-color: var(--color-bg-subtle);
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.passengerName {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text-main);
+}
+
+.passengerPhone {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.callButton {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.routeTimeline {
+  border-left: 2px dashed var(--color-accent-dark);
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 0.75rem;
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  position: absolute;
+  left: -1.35rem;
+  top: 0.3rem;
+}
+
+.timelineLabel {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.timelineValue {
+  font-weight: 600;
+  font-size: 0.92rem;
+}
+
+.gpsBar {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  padding: 0.65rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: #166534;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.actionButtonStart {
+  width: 100%;
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 4px 12px var(--color-accent-glow);
+}
+
+.actionButtonComplete {
+  width: 100%;
+  background-color: #13653f;
+  color: white;
+  padding: 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
+
+.actionButtonPing {
+  width: 100%;
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-main);
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: 1px solid var(--border-medium);
+  cursor: pointer;
+}
+
+.emptyRides {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-muted);
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 1rem;
+  right: 1rem;
+  max-width: 500px;
+  margin: 0 auto;
+  z-index: 100;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: white;
+  text-align: center;
+}
+
+.toastSuccess {
+  background-color: #13653f;
+}
+
+.toastError {
+  background-color: #dc2626;
+}

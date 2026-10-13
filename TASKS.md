@@ -139,16 +139,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 8: DỊCH VỤ VẬN CHUYỂN & ĐIỀU PHỐI (GATE: MOCK INTEGRATION TESTS)
-- [ ] **TASK-08.1: Mock Provider Adapter cho Đưa đón Sân bay**
+- [x] **TASK-08.1: Mock Provider Adapter cho Đưa đón Sân bay**
   - **Requirement IDs:** `INT-01`
-  - **Mô tả:** Xây dựng Transport Adapter interface, mock provider với bảng giá mẫu `4.000 VND/km`, tính khoảng cách và dự toán giá xe.
+  - **Mô tả:** Xây dựng Transport Adapter interface, mock provider với bảng giá mẫu `4.000 VND/km`, tính khoảng cách và dự toán giá xe (Decision Rule 5).
   - **Tiêu chí nghiệm thu:** Mock provider hoạt động ổn định, dễ dàng cắm adapter thật khi có API credentials.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-08.2: Quy trình Điều phối & Dashboard Tài xế**
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/transport.service.ts`, `tests/transport-mock.test.mjs`.
+  - **Test Evidence:** Test suite `tests/transport-mock.test.mjs`: Tính toán cước 35km x 4.000 = 140.000 VND chuẩn xác, khoảng cách tối thiểu >= 1km, giả lập tọa độ GPS tiệm cận về Resort.
+- [x] **TASK-08.2: Quy trình Điều phối & Dashboard Tài xế**
   - **Requirement IDs:** `MAP-01`
-  - **Mô tả:** Giao diện Dispatcher phân tài xế cho chuyến xe; Giao diện Driver cập nhật trạng thái chuyến (Đón, Hoàn thành, Hủy).
-  - **Tiêu chí nghiệm thu:** Luồng phân xe và nhận cuốc hoạt động mượt mà.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Giao diện Dispatcher phân tài xế cho chuyến xe; Giao diện Driver Mobile Web cập nhật trạng thái chuyến (`REQUESTED` $\rightarrow$ `ASSIGNED` $\rightarrow$ `IN_TRANSIT` $\rightarrow$ `COMPLETED`).
+  - **Tiêu chí nghiệm thu:** Luồng phân xe và nhận cuốc hoạt động mượt mà, chặn các bước chuyển trạng thái bất hợp lệ.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/transport.service.ts`, `src/app/api/transport/rides/route.ts`, `src/app/api/transport/assign/route.ts`, `src/app/api/transport/status/route.ts`, `src/app/api/transport/simulate-ping/route.ts`, `src/app/transport/dispatch/page.tsx`, `src/app/transport/dispatch/dispatch.module.css`, `src/app/transport/driver/page.tsx`, `src/app/transport/driver/driver.module.css`, `tests/transport-mock.test.mjs`.
+  - **Test Evidence:** Test suite `tests/transport-mock.test.mjs`: State machine xác thực nghiêm ngặt; Next.js build hoàn thành 22/22 routes.
 
 ---
 

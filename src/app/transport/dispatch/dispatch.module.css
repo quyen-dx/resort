@@ -1,0 +1,259 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #f4f6f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brandLink {
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 1.25rem;
+  font-family: var(--font-serif);
+}
+
+.divider {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.headerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.88rem;
+}
+
+.navButton {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  color: white;
+  transition: background-color var(--transition-fast);
+}
+
+.navButton:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.container {
+  max-width: 1350px;
+  margin: 2rem auto;
+  width: 100%;
+  padding: 0 1.5rem;
+  flex: 1;
+}
+
+.sandboxNotice {
+  background-color: #fffdf5;
+  border: 1px solid #fae8c8;
+  padding: 0.85rem 1.25rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  font-size: 0.88rem;
+  color: #8f6f46;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.statCard {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.statValue {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.tableCard {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.tableCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.tableCardTitle {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.filterGroup {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--border-medium);
+  background-color: white;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filterBtnActive {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.th {
+  padding: 0.75rem;
+  border-bottom: 2px solid var(--border-subtle);
+  color: var(--color-text-muted);
+}
+
+.tr {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.td {
+  padding: 0.75rem;
+}
+
+.rideCode {
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.flightBadge {
+  background-color: rgba(197, 168, 128, 0.2);
+  color: #8f6f46;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+.driverSelect {
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+  background-color: white;
+  font-size: 0.85rem;
+}
+
+.assignBtn {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+}
+
+.pingBtn {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-primary);
+  border: 1px solid var(--border-medium);
+  padding: 0.35rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.35rem;
+}
+
+.gpsCoords {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.toast {
+  position: fixed;
+  top: 4.5rem;
+  right: 2rem;
+  z-index: 100;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: white;
+}
+
+.toastSuccess {
+  background-color: #13653f;
+}
+
+.toastError {
+  background-color: #dc2626;
+}
+
+.emptyNotice {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}

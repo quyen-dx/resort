@@ -35,10 +35,10 @@ export function Navbar() {
             Biệt Thự &amp; Phòng
           </Link>
           <Link
-            href="/#transport"
-            className={styles.navLink}
+            href="/transport/dispatch"
+            className={`${styles.navLink} ${pathname.startsWith('/transport') ? styles.navLinkActive : ''}`}
           >
-            Xe Đưa Đón Sân Bay
+            Điều Phối Xe
           </Link>
           <Link
             href="/reception"
