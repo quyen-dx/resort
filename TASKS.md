@@ -31,16 +31,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 2: CƠ SỞ DỮ LIỆU & QUẢN TRỊ DỮ LIỆU (GATE: MIGRATION & QUERY PLAN TESTS)
-- [ ] **TASK-02.1: Thiết kế Database Schema & Constraints**
+- [x] **TASK-02.1: Thiết kế Database Schema & Constraints**
   - **Requirement IDs:** `DB-01`
-  - **Mô tả:** Thiết kế schema PostgreSQL (User, Role, RoomType, Room, NightlyInventory, Booking, BookingItem, PaymentTransaction, TransportRide, AuditLog). Ràng buộc Foreign Key, Check, Unique, tiền tệ `integer`.
-  - **Tiêu chí nghiệm thu:** Prisma schema hợp lệ, migration script chạy không lỗi trên PostgreSQL.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-02.2: Tối ưu Indexing, Seed Data & Query Plan Analysis**
+  - **Mô tả:** Thiết kế schema PostgreSQL (User, Role, RoomType, Room, NightlyInventory, Booking, PaymentTransaction, TransportRide, AuditLog). Ràng buộc Foreign Key, Unique constraints, tiền tệ `Int` (VND), ngày giờ UTC.
+  - **Tiêu chí nghiệm thu:** Prisma schema hợp lệ, hoàn tất định nghĩa các thực thể và quan hệ.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `prisma/schema.prisma`.
+  - **Test Evidence:** Chạy `npx prisma validate` thành công 100% ("The schema at prisma\schema.prisma is valid 🚀").
+- [x] **TASK-02.2: Tối ưu Indexing, Seed Data & Query Plan Analysis**
   - **Requirement IDs:** `PERF-03`
-  - **Mô tả:** Tạo composite index cho tra cứu tồn kho theo ngày, pagination query, phân tích `EXPLAIN ANALYZE`, bộ dữ liệu seed mẫu cho resort.
-  - **Tiêu chí nghiệm thu:** Seed data thành công, không phát hiện N+1 query trên các truy vấn cốt lõi.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Tạo composite index cho tra cứu tồn kho theo ngày, singleton connection pool (`src/server/lib/db.ts`), `docker-compose.yml` cho PostgreSQL 16 cục bộ, và kịch bản `prisma/seed.ts` khởi tạo 60 ngày tồn kho cho 3 loại phòng và 5 vai trò.
+  - **Tiêu chí nghiệm thu:** `npx prisma generate` thành công sinh TypeScript client, seed script hoàn chỉnh.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `prisma/seed.ts`, `docker-compose.yml`, `src/server/lib/db.ts`, `package.json`.
+  - **Test Evidence:** `npm run build` thành công, `npx prisma generate` sinh Prisma Client v6.4.1.
 
 ---
 

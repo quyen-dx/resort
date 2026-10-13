@@ -13,15 +13,16 @@
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
-- [x] **Roadmap Giai đoạn 1 (Nền tảng dự án & Mô hình tải):**
-  - Khởi tạo dự án Next.js 16 + TypeScript, ESLint.
-  - Phân tách kiến trúc Clean Architecture: Backend (`src/server/`) tách biệt hoàn toàn Frontend (`src/client/`).
-  - Thiết lập `.gitignore` bảo vệ secret, cung cấp `.env.example` chuẩn (`SEC-01`, `OPS-01`).
-  - Tạo cấu trúc domain types, errors (`AppError`), structured logger (`OBS-01`).
-  - Tạo CSS tokens Design System cho resort và tiền ích format tiền VND (`integer`), format ngày VN.
-  - Xây dựng tài liệu định nghĩa mô hình tải và SLO Benchmark [workload_specification.md](file:///d:/resort/docs/workload_specification.md) (`SCALE-01`, `AI-03`).
-  - Build test kiểm chứng: `npm run build` thành công 100%.
-  - Khởi tạo Git repository và đồng bộ an toàn lên GitHub: `https://github.com/quyen-dx/resort.git`.
+- [x] **Roadmap Giai đoạn 2 (Cơ sở dữ liệu & Quản trị dữ liệu):**
+  - Cài đặt Prisma ORM v6.4.1 ổn định và `@prisma/client`.
+  - Thiết kế hoàn chỉnh schema PostgreSQL [prisma/schema.prisma](file:///d:/resort/prisma/schema.prisma) (`DB-01`, `PERF-03`):
+    - 5 Enums: `UserRole`, `RoomStatus`, `BookingStatus`, `PaymentMethod`, `RideStatus`.
+    - 7 Models: `User`, `RoomType`, `Room`, `NightlyInventory`, `Booking`, `PaymentTransaction`, `TransportRide`, `AuditLog`.
+    - Tiền tệ dùng `Int` (VND), ngày giờ UTC, composite unique `[roomTypeId, date]`.
+  - Thiết lập [docker-compose.yml](file:///d:/resort/docker-compose.yml) cho PostgreSQL 16 Alpine cục bộ.
+  - Viết singleton client [src/server/lib/db.ts](file:///d:/resort/src/server/lib/db.ts) kiểm soát connection pool và cảnh báo slow query (>100ms).
+  - Viết seed script [prisma/seed.ts](file:///d:/resort/prisma/seed.ts) khởi tạo 5 tài khoản mẫu, 3 loại phòng cao cấp, danh sách phòng vật lý, và 60 ngày tồn kho.
+  - Test evidence: `npx prisma validate` thành công 100%, `npx prisma generate` sinh type an toàn, `npm run build` hoàn thành không lỗi.
 
 ---
 
@@ -29,35 +30,34 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [package.json](file:///d:/resort/package.json) | Cấu hình dependencies (Next.js, React, TypeScript), scripts và security overrides |
-| [tsconfig.json](file:///d:/resort/tsconfig.json) | Cấu hình TypeScript compiler, path alias `@/*` |
-| [next.config.ts](file:///d:/resort/next.config.ts) | Cấu hình Next.js (strict mode, ẩn header poweredBy) |
-| [.gitignore](file:///d:/resort/.gitignore) & [.env.example](file:///d:/resort/.env.example) | Quản lý biến môi trường an toàn theo chuẩn `SEC-01` |
-| [src/server/](file:///d:/resort/src/server) | Lõi Backend: `core/types`, `core/errors`, `lib/logger` |
-| [src/client/](file:///d:/resort/src/client) | Lõi Frontend: `styles/tokens.css`, `styles/globals.css`, `utils/currency.ts`, `utils/date.ts` |
-| [src/app/page.tsx](file:///d:/resort/src/app/page.tsx) & [layout.tsx](file:///d:/resort/src/app/layout.tsx) | Trang chủ với nhận diện resort sang trọng |
-| [src/app/api/health/route.ts](file:///d:/resort/src/app/api/health/route.ts) | Endpoint giám sát sức khỏe dịch vụ (`OPS-01`, `OBS-01`) |
-| [docs/workload_specification.md](file:///d:/resort/docs/workload_specification.md) | Tài liệu định nghĩa thông số tải & SLO baseline (`SCALE-01`, `AI-03`) |
+| [prisma/schema.prisma](file:///d:/resort/prisma/schema.prisma) | Schema CSDL PostgreSQL chuẩn hóa đầy đủ quan hệ và chỉ mục |
+| [prisma/seed.ts](file:///d:/resort/prisma/seed.ts) | Kịch bản seed dữ liệu mẫu cho 5 vai trò, 3 loại phòng và 60 ngày tồn kho |
+| [docker-compose.yml](file:///d:/resort/docker-compose.yml) | Cấu hình chạy PostgreSQL 16 trên Docker cục bộ |
+| [src/server/lib/db.ts](file:///d:/resort/src/server/lib/db.ts) | Singleton Prisma client chống rò rỉ connection pool |
+| [package.json](file:///d:/resort/package.json) | Bổ sung các script `db:generate`, `db:validate`, `db:push`, `db:seed` |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 2 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Lệnh build:** `npm run build`
-- **Kết quả:** Biên dịch thành công trong 8.8s; TypeScript kiểm tra nghiêm ngặt không có lỗi; sinh ra trang tĩnh `/` và route động `/api/health`.
+- **Prisma Schema Validation:** `npx prisma validate` $\rightarrow$ Valid 🚀.
+- **Client Generation:** `npx prisma generate` $\rightarrow$ Sinh Prisma Client v6.4.1 thành công.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ Thành công trong 325ms, không có lỗi TypeScript hay linter.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Hiện tại chưa kết nối database PostgreSQL sống để chạy migration thực tế. Cần chuẩn bị cấu hình Prisma schema cho Giai đoạn 2.
+- Cần khởi động container PostgreSQL (`docker compose up -d`) khi muốn chạy migrate trực tiếp trên máy cục bộ hoặc kết nối database cloud.
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 2: Database Schema & Migration (`DB-01`, `PERF-03`):**
-  - Khởi tạo Prisma ORM (`npx prisma init`).
-  - Thiết kế Schema chi tiết: `RoomType`, `Room`, `NightlyInventory`, `Booking`, `PaymentTransaction`, `TransportRide`, `User`, `AuditLog`.
-  - Thiết lập ràng buộc toàn vẹn: Không dùng float cho tiền tệ, composite index cho tra cứu tồn kho theo ngày.
+- **Roadmap Giai đoạn 3: Xác thực & Phân quyền (`SEC-02`, `SEC-03`, `SEC-04`):**
+  - Xây dựng Auth Service: Hash mật khẩu (Bcrypt/Argon2id), cấp phát và xác thực session token an toàn qua Cookie `HttpOnly`.
+  - Xây dựng Middleware Server-side RBAC (chặn theo vai trò `Customer`, `Receptionist`, `Driver`, `Dispatcher`, `Admin`).
+  - Xây dựng cơ chế kiểm tra quyền sở hữu tài nguyên để chống IDOR (`SEC-04`).
+
 

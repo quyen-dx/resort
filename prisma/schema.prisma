@@ -1,0 +1,268 @@
+// Prisma Schema for Resort Management & Operations Ecosystem
+// Conforms to DB-01, PERF-03, SEC-03, BOOK-01, BIZ-01
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum UserRole {
+  CUSTOMER
+  RECEPTIONIST
+  DRIVER
+  DISPATCHER
+  ADMIN
+}
+
+enum RoomStatus {
+  AVAILABLE
+  OCCUPIED
+  MAINTENANCE
+  CLEANING
+}
+
+enum BookingStatus {
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentMethod {
+  COUNTER_CASH
+  COUNTER_CARD
+  COUNTER_TRANSFER
+}
+
+enum RideStatus {
+  REQUESTED
+  ASSIGNED
+  IN_TRANSIT
+  COMPLETED
+  CANCELLED
+}
+
+// -----------------------------------------------------------------------------
+// USERS & AUTHENTICATION (SEC-02, SEC-03, SEC-04)
+// -----------------------------------------------------------------------------
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  passwordHash String
+  fullName     String
+  phoneNumber  String?
+  role         UserRole  @default(CUSTOMER)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  bookings          Booking[]            @relation("CustomerBookings")
+  paymentsCollected PaymentTransaction[] @relation("CollectedPayments")
+  ridesDriven       TransportRide[]      @relation("DriverRides")
+  auditLogs         AuditLog[]
+
+  @@index([role])
+  @@index([email])
+}
+
+// -----------------------------------------------------------------------------
+// ROOM TYPES & INVENTORY (BOOK-01, BOOK-02, BOOK-03, PERF-03)
+// -----------------------------------------------------------------------------
+
+model RoomType {
+  id                String   @id @default(uuid())
+  code              String   @unique // e.g. "VILLA_OCEAN", "DELUXE_GARDEN"
+  name              String
+  nameEn            String?
+  description       String
+  maxGuests         Int      @default(2)
+  totalInventory    Int      // Total physical rooms configured for this type
+  basePricePerNight Int      // Currency rule: VND integer (e.g. 3500000 = 3,500,000 VND)
+  images            String[] // URLs of room images
+  amenities         String[] // List of features
+  isActive          Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  physicalRooms   Room[]
+  dailyInventory  NightlyInventory[]
+  bookings        Booking[]
+
+  @@index([code])
+}
+
+// Physical Room instances assigned by Receptionist at Check-in (BOOK-07)
+model Room {
+  id         String     @id @default(uuid())
+  roomNumber String     @unique // e.g. "101", "Villa-01"
+  roomTypeId String
+  floor      Int        @default(1)
+  status     RoomStatus @default(AVAILABLE)
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  // Relations
+  roomType RoomType  @relation(fields: [roomTypeId], references: [id], onDelete: Restrict)
+  bookings Booking[] @relation("AssignedRoomBookings")
+
+  @@index([roomTypeId])
+  @@index([status])
+}
+
+// Nightly Inventory tracks availability per night (BOOK-01, BOOK-02)
+model NightlyInventory {
+  id             String   @id @default(uuid())
+  roomTypeId     String
+  date           DateTime @db.Date // Stored as pure date (UTC)
+  totalCapacity  Int      // Snapshot capacity
+  availableCount Int      // Must be >= 0 (Row-level lock decrement)
+  reservedCount  Int      @default(0)
+  pricePerNight  Int      // Seasonal price in VND integer
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  roomType RoomType @relation(fields: [roomTypeId], references: [id], onDelete: Cascade)
+
+  // Composite unique constraint: One inventory row per room type per night
+  @@unique([roomTypeId, date])
+  @@index([date])
+  @@index([roomTypeId, date])
+}
+
+// -----------------------------------------------------------------------------
+// BOOKINGS & TRANSACTIONS (BOOK-01..08, DB-02, BIZ-01, BIZ-02)
+// -----------------------------------------------------------------------------
+
+model Booking {
+  id                 String        @id @default(uuid())
+  bookingCode        String        @unique // e.g. "AN-202610-A9B2"
+  customerId         String?       // Optional for Guest checkout
+  customerName       String
+  customerPhone      String
+  customerEmail      String
+  roomTypeId         String
+  assignedRoomId     String?       // Physical room assigned at check-in
+  checkInDate        DateTime      @db.Date
+  checkOutDate       DateTime      @db.Date // Day of checkout (not a night stayed)
+  actualCheckOutDate DateTime?     @db.Date // For early check-out audit (BIZ-02)
+  numberOfRooms      Int           @default(1)
+  numberOfGuests     Int           @default(2)
+  totalNights        Int
+
+  // Monetary accounting in VND integer (BIZ-01)
+  amountDue          Int           // Total bill
+  amountPaid         Int           @default(0) // Collected at resort counter
+  balance            Int           // amountDue - amountPaid
+
+  status             BookingStatus @default(CONFIRMED)
+  idempotencyKey     String?       @unique // Retry protection (DB-02, BOOK-04)
+  notes              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  // Relations
+  customer     User?                @relation("CustomerBookings", fields: [customerId], references: [id], onDelete: SetNull)
+  roomType     RoomType             @relation(fields: [roomTypeId], references: [id], onDelete: Restrict)
+  assignedRoom Room?                @relation("AssignedRoomBookings", fields: [assignedRoomId], references: [id], onDelete: SetNull)
+  payments     PaymentTransaction[]
+  transport    TransportRide?
+
+  @@index([bookingCode])
+  @@index([customerId])
+  @@index([roomTypeId])
+  @@index([status])
+  @@index([checkInDate, checkOutDate])
+}
+
+// Counter payment transaction receipts (BIZ-01)
+model PaymentTransaction {
+  id            String        @id @default(uuid())
+  receiptNumber String        @unique // e.g. "RCT-202610-001"
+  bookingId     String
+  amount        Int           // VND integer
+  method        PaymentMethod @default(COUNTER_CASH)
+  actorId       String        // Receptionist user ID who recorded this payment
+  notes         String?
+  createdAt     DateTime      @default(now())
+
+  // Relations
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  actor   User    @relation("CollectedPayments", fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([bookingId])
+  @@index([actorId])
+  @@index([createdAt])
+}
+
+// -----------------------------------------------------------------------------
+// TRANSPORTATION (MAP-01, INT-01)
+// -----------------------------------------------------------------------------
+
+model TransportRide {
+  id               String     @id @default(uuid())
+  rideCode         String     @unique // e.g. "TR-202610-881"
+  bookingId        String     @unique
+  passengerName    String
+  passengerPhone   String
+  flightNumber     String?
+  pickupLocation   String
+  dropoffLocation  String
+  distanceKm       Decimal    @db.Decimal(6, 2)
+  unitPricePerKm   Int        @default(4000) // VND integer: 4,000 VND/km (Mock rate)
+  totalPrice       Int        // distanceKm * unitPricePerKm
+  driverId         String?    // Assigned driver user ID
+  status           RideStatus @default(REQUESTED)
+  pickupTime       DateTime
+  completedTime    DateTime?
+  lastLatitude     Decimal?   @db.Decimal(9, 6)
+  lastLongitude    Decimal?   @db.Decimal(9, 6)
+  notes            String?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  // Relations
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  driver  User?   @relation("DriverRides", fields: [driverId], references: [id], onDelete: SetNull)
+
+  @@index([driverId])
+  @@index([status])
+}
+
+// -----------------------------------------------------------------------------
+// AUDIT LOGGING (SEC-07, BIZ-01, BIZ-02)
+// -----------------------------------------------------------------------------
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?
+  actorRole  String
+  action     String   // e.g. "ASSIGN_ROOM", "RECORD_PAYMENT", "EARLY_CHECKOUT"
+  resource   String   // e.g. "BOOKING", "PAYMENT", "INVENTORY"
+  resourceId String
+  oldValues  Json?
+  newValues  Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  // Relations
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([resource, resourceId])
+  @@index([createdAt])
+}
