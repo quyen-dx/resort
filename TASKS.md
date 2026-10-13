@@ -193,8 +193,18 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 11: SẴN SÀNG TRIỂN KHAI & BÀN GIAO (GATE: RELEASE CHECKLIST SIGN-OFF)
-- [ ] **TASK-11.1: Hoàn thiện Tài liệu Vận hành & Runbook**
-  - **Requirement IDs:** `OPS-01`, `OPS-02`, `AI-01`, `AI-03`
-  - **Mô tả:** Tài liệu hướng dẫn triển khai Production, cấu hình Docker/Cloud, công bố năng lực tải chính xác.
-  - **Tiêu chí nghiệm thu:** Ký duyệt Release Checklist hoàn chỉnh.
-  - **Trạng thái:** Chưa bắt đầu.
+- [x] **TASK-11.1: Hoàn thiện Ma trận Truy xuất, Cổng Phát hành & Hướng dẫn Vận hành**
+  - **Requirement IDs:** `OPS-01`, `OPS-02`, `AI-01`, `AI-02`, `AI-03`
+  - **Mô tả:** 
+    - Lập Ma trận Truy xuất Yêu cầu Toàn diện [docs/traceability_matrix.md](file:///d:/resort/docs/traceability_matrix.md) bao phủ 42/42 Requirement IDs trong backlog.
+    - Biên bản Ký duyệt Phát hành Sản xuất [docs/production_release_checklist.md](file:///d:/resort/docs/production_release_checklist.md) qua 7 Cổng Chất lượng (Bảo mật, Cơ sở dữ liệu, Độ tin cậy & DR, Giám sát, Hiệu năng tải, Giao diện CSS tách rời, Tích hợp vận chuyển).
+    - Hướng dẫn Vận hành & Triển khai Dự án Toàn diện [README.md](file:///d:/resort/README.md) kèm Docker multi-stage (`Dockerfile`, `docker-compose.yml`, `.dockerignore`).
+    - Khẳng định tính trung thực về năng lực tải hệ thống (Decision Rule 6).
+  - **Tiêu chí nghiệm thu:** Ký duyệt Release Checklist hoàn chỉnh 100%, 42/42 requirements verified, 43/43 tests pass, Next.js build 23/23 routes thành công.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `docs/traceability_matrix.md`, `docs/production_release_checklist.md`, `README.md`, `Dockerfile`, `.dockerignore`, `docker-compose.yml`, `TASKS.md`, `CURRENT_STATE.md`.
+  - **Test Evidence:** 
+    - Ma trận 42/42 IDs được nghiệm thu chi tiết trong [docs/traceability_matrix.md](file:///d:/resort/docs/traceability_matrix.md).
+    - Biên bản Ký duyệt chính thức trong [docs/production_release_checklist.md](file:///d:/resort/docs/production_release_checklist.md).
+    - 43/43 Automated tests PASS; 23/23 Next.js routes biên dịch thành công; Docker containerized deployment sẵn sàng.
+
