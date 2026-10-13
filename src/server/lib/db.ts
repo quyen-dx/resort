@@ -23,15 +23,19 @@ if (process.env.NODE_ENV === 'development') {
   globalForPrisma.prisma = db;
 }
 
-// Log slow queries or connection issues if needed
-if (process.env.NODE_ENV === 'development') {
-  // @ts-expect-error Prisma event typing
-  db.$on('query', (e: { query: string; duration: number }) => {
-    if (e.duration > 100) {
-      logger.warn('Slow database query detected (>100ms)', {
-        durationMs: e.duration,
-        query: e.query,
-      });
-    }
-  });
+// Log slow queries in development if event emitter is available
+if (process.env.NODE_ENV === 'development' && typeof (db as any)?.$on === 'function') {
+  try {
+    (db as any).$on('query', (e: { query: string; duration: number }) => {
+      if (e.duration > 100) {
+        logger.warn('Slow database query detected (>100ms)', {
+          durationMs: e.duration,
+          query: e.query,
+        });
+      }
+    });
+  } catch {
+    // Event listener not supported in current environment
+  }
 }
+

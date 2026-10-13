@@ -1,7 +1,7 @@
 'use client';
-
 import React from 'react';
-import { RoomTypeDTO } from '@/server/services/room.service';
+import { RoomTypeDTO } from '@/shared/types/room';
+
 import { formatVND } from '@/client/utils/currency';
 import { Badge } from '../ui/badge';
 import styles from './room-card.module.css';

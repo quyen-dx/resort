@@ -5,9 +5,11 @@ import { Navbar } from '@/client/components/layout/navbar';
 import { SearchBar } from '@/client/components/booking/search-bar';
 import { RoomCard } from '@/client/components/booking/room-card';
 import { BookingModal } from '@/client/components/booking/booking-modal';
-import { RoomTypeDTO, FALLBACK_ROOM_TYPES } from '@/server/services/room.service';
+import { RoomTypeDTO, FALLBACK_ROOM_TYPES } from '@/shared/types/room';
 import { calculateNights } from '@/client/utils/date';
 import styles from './rooms.module.css';
+
+
 
 export default function RoomsPage() {
   const tomorrow = new Date();

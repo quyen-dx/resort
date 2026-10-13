@@ -1,7 +1,7 @@
 'use client';
-
 import React, { useState, useEffect } from 'react';
-import { RoomTypeDTO } from '@/server/services/room.service';
+import { RoomTypeDTO } from '@/shared/types/room';
+
 import { formatVND } from '@/client/utils/currency';
 import { formatDateVN } from '@/client/utils/date';
 import { Badge } from '../ui/badge';
