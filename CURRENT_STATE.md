@@ -13,14 +13,17 @@
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
-- [x] **Roadmap Giai đoạn 3 (Xác thực & Phân quyền RBAC):**
-  - Cài đặt `bcryptjs` (mã hóa mật khẩu an toàn) và `jose` (ký token JWT tương thích cả Edge/Node runtime).
-  - Xây dựng [src/server/lib/auth.ts](file:///d:/resort/src/server/lib/auth.ts): Hash mật khẩu Bcrypt (cost 12), ký JWT session, cấu hình cookie `HttpOnly`, `Secure` (production), `SameSite=Lax`, TTL 7 ngày (`SEC-02`).
-  - Xây dựng [src/server/middleware/rbac.ts](file:///d:/resort/src/server/middleware/rbac.ts): Kiểm tra quyền Server-side (Default-Deny) cho 5 vai trò (`SEC-03`); kiểm tra quyền sở hữu tài nguyên chống IDOR (`SEC-04`).
-  - Xây dựng [src/server/services/auth.service.ts](file:///d:/resort/src/server/services/auth.service.ts): Nghiệp vụ login, register customer, verify session.
-  - Xây dựng các Route Handlers: `/api/auth/login`, `/api/auth/logout`, `/api/auth/me`.
-  - Bộ kiểm thử bảo mật [tests/auth-rbac.test.mjs](file:///d:/resort/tests/auth-rbac.test.mjs): 9/9 test cases pass (Bcrypt hashing, JWT tampering check, RBAC default-deny, Anti-IDOR customer isolation).
-  - Next.js build: 7/7 routes biên dịch thành công.
+- [x] **Roadmap Giai đoạn 4 (Inventory Transaction Engine & Race-Safety):**
+  - Xây dựng [src/server/services/inventory.service.ts](file:///d:/resort/src/server/services/inventory.service.ts):
+    - Thuật toán `calculateStayNights`: kiểm tra ranh giới ngày, loại trừ ngày checkout (`BOOK-01`).
+    - API kiểm tra tính khả dụng `checkAvailability` và route `/api/rooms/availability`.
+    - Trái tim chống Overbooking: `reserveInventoryAtomic` thực hiện atomic conditional update trong transaction (`availableCount >= quantity`).
+    - Tuân thủ quy tắc bất biến: **"First successful atomic commit wins"** (`BOOK-02`, `BOOK-03`).
+    - Hàm giải phóng tồn kho nguyên tử `releaseInventoryAtomic` cho quy trình hủy phòng (`BOOK-06`).
+  - Bộ kiểm thử Concurrency Gate Test [tests/inventory-concurrency.test.mjs](file:///d:/resort/tests/inventory-concurrency.test.mjs):
+    - 5/5 unit tests kiểm chứng ranh giới ngày lưu trú.
+    - 2/2 concurrency stress tests: 50 requests đồng thời tranh nhau 1 phòng cuối cùng (`Inventory = 1`) $\rightarrow$ Chính xác 1 request thành công, 49 requests nhận `SOLD_OUT`, tồn kho bảo toàn 100%, ZERO overbooking!
+  - Toàn bộ test suite: **16/16 test cases PASS (100%)**.
 
 ---
 
@@ -28,36 +31,34 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [src/server/lib/auth.ts](file:///d:/resort/src/server/lib/auth.ts) | Bcrypt hash, jose JWT session tokens và cấu hình HttpOnly cookie |
-| [src/server/middleware/rbac.ts](file:///d:/resort/src/server/middleware/rbac.ts) | RBAC server-side guard và hàm `assertOwnership` chống IDOR |
-| [src/server/services/auth.service.ts](file:///d:/resort/src/server/services/auth.service.ts) | Service xử lý đăng nhập, cấp token, đăng ký tài khoản khách |
-| [src/app/api/auth/login/route.ts](file:///d:/resort/src/app/api/auth/login/route.ts) | API đăng nhập và cấp cookie phiên an toàn |
-| [src/app/api/auth/logout/route.ts](file:///d:/resort/src/app/api/auth/logout/route.ts) | API đăng xuất và thu hồi session cookie |
-| [src/app/api/auth/me/route.ts](file:///d:/resort/src/app/api/auth/me/route.ts) | API kiểm tra thông tin phiên làm việc hiện tại |
-| [tests/auth-rbac.test.mjs](file:///d:/resort/tests/auth-rbac.test.mjs) | Bộ kiểm thử an ninh Auth, RBAC và Anti-IDOR |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 3 |
+| [src/server/services/inventory.service.ts](file:///d:/resort/src/server/services/inventory.service.ts) | Service quản lý tồn kho theo đêm & atomic conditional decrement |
+| [src/app/api/rooms/availability/route.ts](file:///d:/resort/src/app/api/rooms/availability/route.ts) | API kiểm tra tính khả dụng phòng theo ngày |
+| [tests/inventory-concurrency.test.mjs](file:///d:/resort/tests/inventory-concurrency.test.mjs) | Bộ kiểm thử Concurrency Gate Test (`Inventory = 1`) |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 4 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Unit & Security Tests:** `node --test tests/auth-rbac.test.mjs` $\rightarrow$ **9/9 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ 7/7 routes biên dịch thành công không có lỗi type/lint.
+- **Full Test Suite:** `node --test tests/auth-rbac.test.mjs tests/inventory-concurrency.test.mjs` $\rightarrow$ **16/16 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ 8/8 routes biên dịch thành công.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần tích hợp cơ chế Rate-limit (`SEC-06`) trước khi đưa lên môi trường production công khai.
+- Cần tích hợp `Idempotency-Key` ở tầng API tạo booking (Giai đoạn 5) để tránh double-booking khi client retry.
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 4: Inventory Transaction Engine (`BOOK-01`, `BOOK-02`, `BOOK-03`):**
-  - Xây dựng Service tính toán tồn kho theo từng đêm (`nightly inventory`), xử lý ranh giới check-in / check-out.
-  - Thuật toán trừ tồn kho nguyên tử (`Atomic Conditional Lock`) với nguyên tắc *"First successful atomic commit wins"*.
-  - Viết bài kiểm thử đồng thời (Concurrency Test: `Inventory = 1`) kiểm chứng chống overbooking tuyệt đối.
+- **Roadmap Giai đoạn 5: Booking API & Idempotency (`DB-02`, `BOOK-04`, `BOOK-05`, `BOOK-06`):**
+  - Xây dựng Booking Creation Service với xử lý `Idempotency-Key`.
+  - Triển khai State Machine cho Booking: `CONFIRMED` $\rightarrow$ `CHECKED_IN` $\rightarrow$ `CHECKED_OUT` (hoặc `CANCELLED`, `NO_SHOW`).
+  - Logic hủy phòng kết nối với `releaseInventoryAtomic` để hoàn trả tồn kho tức thời.
+  - Viết bài kiểm thử Idempotency retry và Race condition giữa Hủy phòng & Đặt phòng mới.
+
 
 
 

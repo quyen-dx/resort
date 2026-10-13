@@ -67,16 +67,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 4: INVENTORY TRANSACTION ENGINE (GATE: INVENTORY=1 CONCURRENCY TEST)
-- [ ] **TASK-04.1: Logic Tồn kho theo Đêm & Ranh giới Ngày**
+- [x] **TASK-04.1: Logic Tồn kho theo Đêm & Ranh giới Ngày**
   - **Requirement IDs:** `BOOK-01`
-  - **Mô tả:** Thuật toán tính số đêm lưu trú (loại trừ ngày checkout), kiểm tra tính khả dụng của từng đêm trong khoảng ngày.
+  - **Mô tả:** Thuật toán tính số đêm lưu trú (loại trừ ngày checkout), kiểm tra tính khả dụng của từng đêm trong khoảng ngày, xử lý ranh giới qua tháng/qua năm (`src/server/services/inventory.service.ts`).
   - **Tiêu chí nghiệm thu:** Unit test bao phủ các ca: 1 đêm, nhiều đêm, qua tháng/năm, nhiều loại phòng.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-04.2: Atomic Conditional Lock & Chống Overbooking**
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/inventory.service.ts`, `src/app/api/rooms/availability/route.ts`, `tests/inventory-concurrency.test.mjs`.
+  - **Test Evidence:** Chạy `tests/inventory-concurrency.test.mjs` đạt 5/5 unit test pass cho các kịch bản ranh giới ngày.
+- [x] **TASK-04.2: Atomic Conditional Lock & Chống Overbooking**
   - **Requirement IDs:** `BOOK-02`, `BOOK-03`
-  - **Mô tả:** Thực hiện trừ tồn kho bằng atomic update trong transaction (`First successful atomic commit wins`). Trả về `CONFLICT` nếu không đủ tồn kho.
-  - **Tiêu chí nghiệm thu:** Kiểm thử đồng thời (Concurrency Test) với `Inventory = 1`: 100 requests cùng gửi $\rightarrow$ chính xác 1 booking thành công, 99 requests nhận lỗi hết phòng.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Thực hiện trừ tồn kho bằng atomic conditional update trong transaction (`First successful atomic commit wins`). Ném lỗi `SOLD_OUT` và rollback toàn bộ nếu có bất kỳ đêm nào không đủ tồn kho.
+  - **Tiêu chí nghiệm thu:** Kiểm thử đồng thời (Concurrency Gate Test) với `Inventory = 1`: 50 requests cùng gửi $\rightarrow$ chính xác đúng 1 booking thành công, 49 requests nhận lỗi hết phòng (`SOLD_OUT / 409`).
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/inventory.service.ts`, `tests/inventory-concurrency.test.mjs`.
+  - **Test Evidence:** Chạy Concurrency Gate Test: 50 requests đồng thời tranh nhau 1 phòng cuối cùng $\rightarrow$ Đúng 1 request CONFIRMED, 49 requests SOLD_OUT, Available = 0, Reserved = 1, Zero overbooking. Kịch bản 30 requests tranh 3 phòng $\rightarrow$ Đúng 3 CONFIRMED, 27 SOLD_OUT.
 
 ---
 
