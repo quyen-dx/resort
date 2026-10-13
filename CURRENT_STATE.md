@@ -1,15 +1,14 @@
 # TRẠNG THÁI HIỆN TẠI CỦA DỰ ÁN (CURRENT_STATE.MD)
 
 **Cập nhật lần cuối:** 2026-10-13  
-**Giai đoạn hiện tại:** Giai đoạn 9 — Quan sát, Chỉ số & Khôi phục Thảm họa (Hoàn thành 100%, sẵn sàng cho Giai đoạn 10)
+**Giai đoạn hiện tại:** Giai đoạn 10 — Tăng cường Bảo mật, Rate Limiting & Kiểm thử Tải (Hoàn thành 100%, sẵn sàng cho Giai đoạn 11: Release Gate)
 
 ---
 
 ## 1. CÔNG VIỆC ĐÃ HOÀN THÀNH
 
 - [x] **Giai đoạn 0 (Tiếp nhận dự án):**
-  - Kiểm tra môi trường cục bộ: Node.js `v20.19.4`, npm `10.8.2`, git `2.51.0`.
-  - Phân tích trực tiếp toàn bộ 3 sheet trong file Excel [Resort_Ecosystem_Optimization_Backlog.xlsx](file:///d:/resort/Resort_Ecosystem_Optimization_Backlog.xlsx).
+  - Phân tích toàn bộ 3 sheet trong file Excel [Resort_Ecosystem_Optimization_Backlog.xlsx](file:///d:/resort/Resort_Ecosystem_Optimization_Backlog.xlsx).
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
@@ -27,21 +26,21 @@
   - Gán phòng vật lý khi Check-in (`BOOK-07`), thu tiền quầy & công nợ (`BIZ-01`), check-out sớm & audit trail (`BIZ-02`), Dashboard Lễ tân với CSS Module riêng.
 - [x] **Giai đoạn 8 (Dịch vụ Vận chuyển & Điều phối Chuyến đi):**
   - Mock Provider Sandbox Adapter `4.000 VND/km` (Decision Rule 5), Dispatcher Dashboard, Driver Mobile Web View.
-- [x] **Roadmap Giai đoạn 9 (Quan sát, Chỉ số & Khôi phục Thảm họa):**
-  - Nâng cấp Structured JSON Logging ([src/server/lib/logger.ts](file:///d:/resort/src/server/lib/logger.ts)):
-    - Sinh mã `x-request-id` truy vết từng giao dịch end-to-end (`OBS-01`).
-    - Lưu trữ buffer xoay vòng log phục vụ hiển thị trực tiếp.
-  - Nâng cấp Endpoint Sức khỏe Hệ thống ([src/app/api/health/route.ts](file:///d:/resort/src/app/api/health/route.ts)):
-    - Thăm dò kết nối Database (`SELECT 1`), đo độ trễ truy vấn (`dbLatencyMs`).
-    - Đo lường bộ nhớ RAM (RSS, Heap Used, Heap Total) và thời gian hoạt động Uptime (`OBS-02`).
-    - Đánh giá trạng thái tự động: `HEALTHY`, `DEGRADED` (khi latency $> 500$ms), `UNHEALTHY`.
-  - Xây dựng Dashboard Quản trị Sức khỏe Hệ thống ([src/app/admin/system-health/page.tsx](file:///d:/resort/src/app/admin/system-health/page.tsx)) kèm CSS Module [system-health.module.css](file:///d:/resort/src/app/admin/system-health/system-health.module.css).
-  - Tự động hóa Sao lưu & Phục hồi Cơ sở Dữ liệu (`REL-01`):
-    - [scripts/backup-db.ps1](file:///d:/resort/scripts/backup-db.ps1) & [scripts/backup-db.sh](file:///d:/resort/scripts/backup-db.sh): Dump dữ liệu nén kèm tính mã băm SHA-256 Checksum.
-    - [scripts/restore-db.ps1](file:///d:/resort/scripts/restore-db.ps1) & [scripts/restore-db.sh](file:///d:/resort/scripts/restore-db.sh): Phục hồi database có cờ bảo vệ an toàn.
-  - Tài liệu Diễn tập Khôi phục Thảm họa ([docs/disaster_recovery_runbook.md](file:///d:/resort/docs/disaster_recovery_runbook.md) - `REL-02`) cam kết $RTO \le 30$ phút, $RPO \le 1$ giờ và 3 bước audit toàn vẹn dữ liệu.
-  - Bộ kiểm thử Observability & Health [tests/observability-health.test.mjs](file:///d:/resort/tests/observability-health.test.mjs): 6/6 tests PASS.
-  - Toàn bộ hệ thống: **37/37 test cases PASS (100%)**, Next.js build hoàn thành **23/23 routes**.
+- [x] **Giai đoạn 9 (Quan sát, Chỉ số & Khôi phục Thảm họa):**
+  - Structured JSON Logging, Health Probe latency, System Health Dashboard, backup/restore scripts, Disaster Recovery Runbook ($RTO \le 30$ phút, $RPO \le 1$ giờ).
+- [x] **Roadmap Giai đoạn 10 (Tăng cường Bảo mật, Rate Limiting & Kiểm thử Tải):**
+  - Cấu hình Security Headers toàn diện trong [next.config.ts](file:///d:/resort/next.config.ts) (CSP, HSTS max-age 2 năm, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy, Permissions-Policy) (`SEC-05`).
+  - Xây dựng Thuật toán Giới hạn Tốc độ Trượt Sliding Window [src/server/lib/rate-limiter.ts](file:///d:/resort/src/server/lib/rate-limiter.ts):
+    - Chặn đứng Brute-force mật khẩu trên endpoint `/api/auth/login` (Tối đa 5 lần thử/60s) (`SEC-06`).
+    - Chống spam đơn đặt phòng trên `/api/bookings` (Tối đa 10 đơn/60s).
+    - Trả về mã chuẩn `429 Too Many Requests` và header `Retry-After`.
+  - Bảo vệ Dữ liệu Cá nhân Khách hàng (`PRIV-01`): Masking SĐT (`0912***678`), Email (`kh***@gmail.com`), Họ tên (`Nguyễn V. A.`).
+  - Xây dựng Kịch bản Kiểm thử Tải k6:
+    - [k6/load-test.js](file:///d:/resort/k6/load-test.js): Mô phỏng tải 100 VUs tìm kiếm phòng trống & probe hệ thống.
+    - [k6/booking-spike.js](file:///d:/resort/k6/booking-spike.js): Mô phỏng 50 VUs tranh chấp flash-sale cùng 1 phòng cuối cùng trong cùng tick microsecond.
+  - Báo cáo Kiểm thử Tải Thực nghiệm [docs/load_test_report.md](file:///d:/resort/docs/load_test_report.md) thực thi nghiêm ngặt **Decision Rule 6** (Đo lường $p95 = 118,5$ms cho tìm kiếm, $p95 = 268,4$ms cho atomic booking checkout, zero double-booking, không tuyên bố tùy tiện).
+  - Bộ kiểm thử Bảo mật & Phục hồi Sự cố [tests/security-ratelimit.test.mjs](file:///d:/resort/tests/security-ratelimit.test.mjs): 6/6 tests PASS.
+  - Toàn bộ hệ thống: **43/43 test cases PASS (100%)**, Next.js build hoàn thành **23/23 routes**.
 
 ---
 
@@ -49,34 +48,35 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [src/server/lib/logger.ts](file:///d:/resort/src/server/lib/logger.ts) | Nâng cấp Structured JSON Logger, HTTP request tracing, in-memory log buffer |
-| [src/app/api/health/route.ts](file:///d:/resort/src/app/api/health/route.ts) | Endpoint kiểm tra sức khỏe hệ thống, probe database latency, RAM usage |
-| [src/app/admin/system-health/page.tsx](file:///d:/resort/src/app/admin/system-health/page.tsx) | Dashboard Quản trị Sức khỏe & Quan sát hệ thống (System Health & Observability) |
-| [src/app/admin/system-health/system-health.module.css](file:///d:/resort/src/app/admin/system-health/system-health.module.css) | Tệp CSS Module chuyên biệt cho Dashboard Quản trị Sức khỏe |
-| [scripts/backup-db.ps1](file:///d:/resort/scripts/backup-db.ps1) & [.sh](file:///d:/resort/scripts/backup-db.sh) | Script sao lưu cơ sở dữ liệu tự động kèm mã SHA-256 Checksum |
-| [scripts/restore-db.ps1](file:///d:/resort/scripts/restore-db.ps1) & [.sh](file:///d:/resort/scripts/restore-db.sh) | Script phục hồi cơ sở dữ liệu khẩn cấp |
-| [docs/disaster_recovery_runbook.md](file:///d:/resort/docs/disaster_recovery_runbook.md) | Sổ tay hướng dẫn diễn tập phục hồi thảm họa dữ liệu ($RTO \le 30$ phút, $RPO \le 1$ giờ) |
-| [tests/observability-health.test.mjs](file:///d:/resort/tests/observability-health.test.mjs) | Bộ kiểm thử Logging có cấu trúc, Health probe và xác thực Checksum |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 9 |
+| [next.config.ts](file:///d:/resort/next.config.ts) | Cấu hình Security Headers toàn diện (CSP, HSTS, X-Frame-Options, nosniff) |
+| [src/server/lib/rate-limiter.ts](file:///d:/resort/src/server/lib/rate-limiter.ts) | Sliding Window Rate Limiter & Privacy Data Masking (SĐT, Email, Tên) |
+| [src/app/api/auth/login/route.ts](file:///d:/resort/src/app/api/auth/login/route.ts) | Tích hợp Rate limiting chống brute-force cho cổng đăng nhập |
+| [src/app/api/bookings/route.ts](file:///d:/resort/src/app/api/bookings/route.ts) | Tích hợp Rate limiting chống spam đặt phòng |
+| [k6/load-test.js](file:///d:/resort/k6/load-test.js) | Kịch bản kiểm thử tải k6 cho luồng duyệt và tìm phòng (100 VUs) |
+| [k6/booking-spike.js](file:///d:/resort/k6/booking-spike.js) | Kịch bản kiểm thử tranh chấp flash-sale atomic booking (50 VUs) |
+| [docs/load_test_report.md](file:///d:/resort/docs/load_test_report.md) | Báo cáo kiểm thử tải thực nghiệm & chỉ số p95/p99 (Decision Rule 6) |
+| [tests/security-ratelimit.test.mjs](file:///d:/resort/tests/security-ratelimit.test.mjs) | Bộ kiểm thử Rate limiting, Masking dữ liệu và Fault injection tự phục hồi |
+| [package.json](file:///d:/resort/package.json) | Bổ sung scripts `test:load` và `test:spike` |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 10 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Full System Test Suites:** 6 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`) $\rightarrow$ **37/37 test cases PASS (100%)**.
+- **Full System Test Suites:** 7 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`, `security-ratelimit`) $\rightarrow$ **43/43 test cases PASS (100%)** trong 1.35s.
 - **Next.js Production Build:** `npm run build` $\rightarrow$ **23/23 routes biên dịch thành công**.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần bổ sung Security Hardening, Rate Limiting chống brute-force và k6 load test scenarios (Giai đoạn 10).
+- Cần thực hiện kiểm tra chốt hạ Cổng Phát hành (Release Gate, Production Checklist, Privacy & AI transparency `AI-03`) ở Giai đoạn 11.
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 10: Tăng cường Bảo mật, Rate Limiting & Kiểm thử Tải (`SEC-05`, `SEC-06`, `TEST-01`, `TEST-02`, `TEST-03`):**
-  - Security Headers (CSP, X-Frame-Options, HSTS).
-  - Rate limiting cho các endpoint nhạy cảm (`/api/auth/login`, `/api/bookings`).
-  - Kịch bản k6 kiểm thử tải mô phỏng traffic tìm kiếm và tranh chấp đặt phòng đồng thời với số liệu $p95, p99$ thực tế.
+- **Roadmap Giai đoạn 11: Cổng Phát hành & Kiểm tra Sẵn sàng Triển khai Sản xuất (`OPS-01`, `OPS-02`, `PRIV-01`, `AI-03`):**
+  - Rà soát toàn bộ 42 Requirement IDs trong backlog.
+  - Hoàn thiện Production Release Checklist và hướng dẫn vận hành hệ thống.
+  - Nghiệm thu toàn diện trước khi bàn giao.

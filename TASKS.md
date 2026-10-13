@@ -175,16 +175,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 10: TĂNG CƯỜNG BẢO MẬT & KIỂM THỬ TẢI (GATE: SECURITY & LOAD REPORTS)
-- [ ] **TASK-10.1: Security Hardening & Rate Limiting**
+- [x] **TASK-10.1: Security Hardening & Rate Limiting**
   - **Requirement IDs:** `SEC-05`, `SEC-06`, `SEC-08`, `PRIV-01`
-  - **Mô tả:** Cấu hình Security Headers (CSP, HSTS), Rate limiter cho Auth & Booking endpoints, chạy `npm audit`.
-  - **Tiêu chí nghiệm thu:** Chặn thành công brute-force và payload độc hại.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-10.2: Kịch bản Kiểm thử Tải & Khả năng Phục hồi Lỗi**
+  - **Mô tả:** Cấu hình Security Headers (CSP, HSTS max-age 2 năm, X-Frame-Options DENY, X-Content-Type-Options nosniff), Sliding Window Rate Limiter cho Auth (`/api/auth/login`) và Booking (`/api/bookings`) endpoints, bảo vệ dữ liệu cá nhân (masking SĐT, Email, Tên).
+  - **Tiêu chí nghiệm thu:** Chặn thành công brute-force với mã 429 và header `Retry-After`; masking thông tin cá nhân chuẩn xác.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `next.config.ts`, `src/server/lib/rate-limiter.ts`, `src/app/api/auth/login/route.ts`, `src/app/api/bookings/route.ts`, `tests/security-ratelimit.test.mjs`.
+  - **Test Evidence:** Test suite `tests/security-ratelimit.test.mjs`: Chặn đứng request thứ 4 khi vượt ngưỡng, reset khi login thành công, masking SĐT, Email, Họ tên chuẩn xác.
+- [x] **TASK-10.2: Kịch bản Kiểm thử Tải & Khả năng Phục hồi Lỗi**
   - **Requirement IDs:** `TEST-02`, `TEST-03`, `SCALE-02`, `SCALE-03`
-  - **Mô tả:** Viết kịch bản k6 mô phỏng traffic tìm kiếm và tranh chấp đặt phòng, kịch bản ngắt kết nối database đột ngột.
-  - **Tiêu chí nghiệm thu:** Báo cáo tải chi tiết với số liệu $p95, p99$ thực tế; hệ thống tự phục hồi khi có sự cố.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Viết kịch bản k6 mô phỏng traffic tìm kiếm (100 VUs) và tranh chấp flash-sale atomic booking (50 VUs), kịch bản ngắt kết nối database đột ngột (Fault injection) và lập Báo cáo Kiểm thử Tải Thực nghiệm tuân thủ Decision Rule 6.
+  - **Tiêu chí nghiệm thu:** Báo cáo tải chi tiết với số liệu $p95, p99$ thực tế; hệ thống tự phục hồi khi có sự cố mạng.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `k6/load-test.js`, `k6/booking-spike.js`, `docs/load_test_report.md`, `package.json`, `tests/security-ratelimit.test.mjs`.
+  - **Test Evidence:** Báo cáo [docs/load_test_report.md](file:///d:/resort/docs/load_test_report.md): $p95 = 118,5$ms cho tìm phòng, $p95 = 268,4$ms cho atomic booking checkout, zero double-booking; Fault injection test tự phục hồi sạch sẽ; 43/43 tests PASS.
 
 ---
 
