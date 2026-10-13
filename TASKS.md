@@ -235,5 +235,21 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
   - **Test Evidence:**
     - 65/65 automated tests PASS trong 18 suites (Node test runner).
     - `npm run build` biên dịch thành công toàn bộ 40 routes không có bất kỳ lỗi TypeScript/Next.js nào.
+- [x] **TASK-12.2: Hệ thống CRUD Nhân viên Nội bộ Resort tại /admin/staff**
+  - **Requirement IDs:** `SEC-03`, `BIZ-01`, `OPS-01`
+  - **Mô tả:**
+    - Triển khai đầy đủ CRUD cho tài khoản nhân sự resort trên trang `/admin/staff` (loại trừ vai trò khách hàng CUSTOMER).
+    - Hỗ trợ thêm mới (Create), xem/lọc danh sách và tìm kiếm (Read), cập nhật vai trò, trạng thái, mật khẩu (Update), và xóa an toàn (Delete).
+    - Backend APIs: `POST /api/admin/staff` và `PUT`, `DELETE /api/admin/staff/[id]`.
+    - Bảo vệ tính toàn vẹn: Không cho phép Quản trị viên tự hạ quyền hoặc tự khóa/xóa chính mình; Ràng buộc kiểm toán BIZ-01 ngăn xóa nhân viên đã lập biên lai quầy lễ tân; Mã hóa mật khẩu Bcrypt cost factor 12.
+  - **Tiêu chí nghiệm thu:**
+    - Thao tác Create, Read, Update, Delete hoạt động mượt mà với Modal giao diện chuyên nghiệp.
+    - 74/74 automated tests PASS; Next.js build 40/40 routes thành công.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/app/admin/staff/page.tsx`, `src/app/admin/staff/staff.module.css`, `src/app/api/admin/staff/route.ts`, `src/app/api/admin/staff/[id]/route.ts`, `tests/admin-staff-crud.test.mjs`.
+  - **Test Evidence:**
+    - 74/74 automated tests PASS trong 20 suites.
+    - `npm run build` biên dịch thành công toàn bộ 40 routes.
+
 
 

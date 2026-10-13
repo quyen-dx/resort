@@ -69,7 +69,7 @@
     2. `/admin/room-types` + `/api/admin/room-types` (Quản lý danh mục loại phòng)
     3. `/admin/bookings` + `/api/admin/bookings` (Quản lý đặt phòng toàn hệ thống)
     4. `/admin/customers` + `/api/admin/customers` (Quản lý khách hàng)
-    5. `/admin/staff` + `/api/admin/staff` (Quản lý nhân viên nội bộ)
+    5. `/admin/staff` + `/api/admin/staff` & `/api/admin/staff/[id]` (CRUD quản lý nhân viên nội bộ: thêm mới, sửa vai trò/mật khẩu/trạng thái, khóa, xóa an toàn kiểm toán)
     6. `/admin/transfers` + `/api/admin/transfers` (Quản lý và điều phối xe)
     7. `/admin/system-health` (Giám sát hạ tầng kỹ thuật tích hợp)
   - Bảo mật & Phân quyền: Cả 3 lớp (Sidebar, Middleware `/admin/:path*`, Route Handler `requireRole(session, 'ADMIN')`) ngăn chặn 100% truy cập trái phép.
@@ -78,7 +78,7 @@
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Automated Test Suites:** 9 bộ test (kèm [tests/admin-dashboard.test.mjs](file:///d:/resort/tests/admin-dashboard.test.mjs)) $\rightarrow$ **65/65 test cases PASS (100%)**.
+- **Automated Test Suites:** 10 bộ test (kèm [tests/admin-staff-crud.test.mjs](file:///d:/resort/tests/admin-staff-crud.test.mjs)) $\rightarrow$ **74/74 test cases PASS (100%)**.
 - **Next.js Production Build:** `npm run build` $\rightarrow$ **40/40 routes biên dịch thành công kèm Proxy Middleware**.
 - **Chỉ số Hiệu năng & Tải k6:** 1.240 req/s, $p95 = 118,5$ms (read), $p95 = 268,4$ms (atomic booking), 0.00% overbooking.
 
