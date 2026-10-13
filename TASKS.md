@@ -121,16 +121,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 7: NGHIỆP VỤ LỄ TÂN & VẬN HÀNH QUẦY (GATE: E2E & AUDIT EVIDENCE)
-- [ ] **TASK-07.1: Gán Phòng Vật lý khi Check-in**
+- [x] **TASK-07.1: Gán Phòng Vật lý khi Check-in**
   - **Requirement IDs:** `BOOK-07`
-  - **Mô tả:** Giao diện lễ tân hiển thị danh sách check-in trong ngày, chọn và gán số phòng vật lý với DB constraint chống trùng phòng.
+  - **Mô tả:** Giao diện lễ tân hiển thị danh sách check-in trong ngày, chọn và gán số phòng vật lý với DB constraint chống trùng phòng. Chặn triệt để ca 2 lễ tân cùng gán 1 phòng cho 2 booking khác nhau.
   - **Tiêu chí nghiệm thu:** Hai lễ tân cùng thao tác không thể gán một phòng cho hai booking trùng ngày.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-07.2: Quản trị Thanh toán tại Quầy & Check-out Sớm**
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/reception.service.ts`, `src/app/api/reception/check-in/route.ts`, `src/app/reception/page.tsx`, `tests/reception-desk.test.mjs`.
+  - **Test Evidence:** Test suite `tests/reception-desk.test.mjs`: Gán phòng thành công và chặn thành công ngoại lệ CONFLICT khi phòng đã có khách.
+- [x] **TASK-07.2: Quản trị Thanh toán tại Quầy & Check-out Sớm**
   - **Requirement IDs:** `BIZ-01`, `BIZ-02`
-  - **Mô tả:** Ghi nhận thanh toán tiền mặt/chuyển khoản quầy, tính toán công nợ (`due`, `paid`, `balance`). Xử lý check-out sớm với audit log.
+  - **Mô tả:** Ghi nhận thanh toán tiền mặt/chuyển khoản/thẻ tại quầy, xuất biên lai `RCT-YYYYMM-XXX`, tự động cập nhật công nợ (`due`, `paid`, `balance`). Xử lý check-out sớm với ghi nhận `actual_checkout_date`, chuyển phòng sang `CLEANING` và audit trail chi tiết.
   - **Tiêu chí nghiệm thu:** Báo cáo đối soát doanh thu khớp 100% với lịch sử giao dịch.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/services/reception.service.ts`, `src/app/api/reception/payment/route.ts`, `src/app/api/reception/check-out/route.ts`, `src/app/reception/page.tsx`, `tests/reception-desk.test.mjs`.
+  - **Test Evidence:** Test suite `tests/reception-desk.test.mjs`: Thanh toán từng phần chính xác, chặn thu vượt quá công nợ, xử lý check-out sớm với audit trail hoàn chỉnh.
 
 ---
 
