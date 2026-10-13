@@ -1,0 +1,54 @@
+:root {
+  /* Brand Luxury Palette */
+  --color-primary: #0f2a24;        /* Deep Forest Emerald */
+  --color-primary-light: #183f36;
+  --color-primary-dark: #071512;
+  
+  --color-accent: #c5a880;         /* Warm Champagne Gold */
+  --color-accent-light: #d8c3a5;
+  --color-accent-dark: #a88960;
+  --color-accent-glow: rgba(197, 168, 128, 0.25);
+
+  --color-bg-main: #fbfbfa;        /* Soft Sand White */
+  --color-bg-surface: #ffffff;
+  --color-bg-subtle: #f4f2ee;
+  --color-bg-dark: #121615;
+
+  --color-text-main: #1c2421;      /* Charcoal Obsidian */
+  --color-text-muted: #64706c;
+  --color-text-light: #9ba6a2;
+  --color-text-inverse: #ffffff;
+
+  /* Functional Status */
+  --color-success: #1b8755;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-info: #0284c7;
+
+  /* Borders & Dividers */
+  --border-subtle: rgba(28, 36, 33, 0.08);
+  --border-medium: rgba(28, 36, 33, 0.16);
+  --border-accent: rgba(197, 168, 128, 0.4);
+
+  /* Shadows & Glassmorphism */
+  --shadow-sm: 0 1px 2px rgba(15, 42, 36, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 42, 36, 0.08);
+  --shadow-lg: 0 12px 32px rgba(15, 42, 36, 0.12);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.6);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
