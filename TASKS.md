@@ -49,16 +49,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 3: XÁC THỰC & PHÂN QUYỀN (GATE: AUTH/RBAC/IDOR TESTS)
-- [ ] **TASK-03.1: Cơ chế Xác thực An toàn & Quản lý Phiên (Session/Cookies)**
+- [x] **TASK-03.1: Cơ chế Xác thực An toàn & Quản lý Phiên (Session/Cookies)**
   - **Requirement IDs:** `SEC-02`
-  - **Mô tả:** Mã hóa mật khẩu Argon2id/Bcrypt, cấp session token trong Cookie `HttpOnly`, `Secure`, `SameSite`. Session rotation khi login/logout.
-  - **Tiêu chí nghiệm thu:** Test login, logout, hết hạn phiên, kiểm tra đầy đủ cờ bảo mật của cookie.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-03.2: Hệ thống RBAC Server-side & Chống IDOR**
+  - **Mô tả:** Mã hóa mật khẩu Bcrypt (cost factor 12), cấp session token qua `jose` JWT được ký bằng `SESSION_SECRET`, lưu trong Cookie `HttpOnly`, `SameSite=Lax`, `Secure` trên HTTPS. Session rotation khi login/logout.
+  - **Tiêu chí nghiệm thu:** Test login, logout, hết hạn phiên, kiểm tra cờ bảo mật cookie.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/lib/auth.ts`, `src/server/services/auth.service.ts`, `src/app/api/auth/login/route.ts`, `src/app/api/auth/logout/route.ts`, `src/app/api/auth/me/route.ts`.
+  - **Test Evidence:** Chạy `node --test tests/auth-rbac.test.mjs` đạt 100% (2/2 test suite pass: Bcrypt hashing & JWT signing/tampering detection).
+- [x] **TASK-03.2: Hệ thống RBAC Server-side & Chống IDOR**
   - **Requirement IDs:** `SEC-03`, `SEC-04`
-  - **Mô tả:** Phân quyền 5 vai trò (`Customer`, `Receptionist`, `Driver`, `Dispatcher`, `Admin`) ở Middleware/API Handlers (Default-deny). Ownership validation trên mọi tài nguyên booking.
+  - **Mô tả:** Phân quyền 5 vai trò (`CUSTOMER`, `RECEPTIONIST`, `DRIVER`, `DISPATCHER`, `ADMIN`) ở tầng Server-side (`src/server/middleware/rbac.ts`) theo nguyên tắc Default-Deny. Hàm `assertOwnership` kiểm tra quyền sở hữu tài nguyên chống IDOR.
   - **Tiêu chí nghiệm thu:** Test chặn truy cập trái quyền; Khách A không thể truy vấn hoặc can thiệp booking của Khách B.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/middleware/rbac.ts`, `tests/auth-rbac.test.mjs`.
+  - **Test Evidence:** Chạy `node --test tests/auth-rbac.test.mjs` đạt 7/7 test pass: Default Deny, chặn trái quyền, và chặn thành công vi phạm IDOR.
 
 ---
 

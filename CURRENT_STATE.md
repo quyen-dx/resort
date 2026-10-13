@@ -13,16 +13,14 @@
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
-- [x] **Roadmap Giai đoạn 2 (Cơ sở dữ liệu & Quản trị dữ liệu):**
-  - Cài đặt Prisma ORM v6.4.1 ổn định và `@prisma/client`.
-  - Thiết kế hoàn chỉnh schema PostgreSQL [prisma/schema.prisma](file:///d:/resort/prisma/schema.prisma) (`DB-01`, `PERF-03`):
-    - 5 Enums: `UserRole`, `RoomStatus`, `BookingStatus`, `PaymentMethod`, `RideStatus`.
-    - 7 Models: `User`, `RoomType`, `Room`, `NightlyInventory`, `Booking`, `PaymentTransaction`, `TransportRide`, `AuditLog`.
-    - Tiền tệ dùng `Int` (VND), ngày giờ UTC, composite unique `[roomTypeId, date]`.
-  - Thiết lập [docker-compose.yml](file:///d:/resort/docker-compose.yml) cho PostgreSQL 16 Alpine cục bộ.
-  - Viết singleton client [src/server/lib/db.ts](file:///d:/resort/src/server/lib/db.ts) kiểm soát connection pool và cảnh báo slow query (>100ms).
-  - Viết seed script [prisma/seed.ts](file:///d:/resort/prisma/seed.ts) khởi tạo 5 tài khoản mẫu, 3 loại phòng cao cấp, danh sách phòng vật lý, và 60 ngày tồn kho.
-  - Test evidence: `npx prisma validate` thành công 100%, `npx prisma generate` sinh type an toàn, `npm run build` hoàn thành không lỗi.
+- [x] **Roadmap Giai đoạn 3 (Xác thực & Phân quyền RBAC):**
+  - Cài đặt `bcryptjs` (mã hóa mật khẩu an toàn) và `jose` (ký token JWT tương thích cả Edge/Node runtime).
+  - Xây dựng [src/server/lib/auth.ts](file:///d:/resort/src/server/lib/auth.ts): Hash mật khẩu Bcrypt (cost 12), ký JWT session, cấu hình cookie `HttpOnly`, `Secure` (production), `SameSite=Lax`, TTL 7 ngày (`SEC-02`).
+  - Xây dựng [src/server/middleware/rbac.ts](file:///d:/resort/src/server/middleware/rbac.ts): Kiểm tra quyền Server-side (Default-Deny) cho 5 vai trò (`SEC-03`); kiểm tra quyền sở hữu tài nguyên chống IDOR (`SEC-04`).
+  - Xây dựng [src/server/services/auth.service.ts](file:///d:/resort/src/server/services/auth.service.ts): Nghiệp vụ login, register customer, verify session.
+  - Xây dựng các Route Handlers: `/api/auth/login`, `/api/auth/logout`, `/api/auth/me`.
+  - Bộ kiểm thử bảo mật [tests/auth-rbac.test.mjs](file:///d:/resort/tests/auth-rbac.test.mjs): 9/9 test cases pass (Bcrypt hashing, JWT tampering check, RBAC default-deny, Anti-IDOR customer isolation).
+  - Next.js build: 7/7 routes biên dịch thành công.
 
 ---
 
@@ -30,34 +28,36 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [prisma/schema.prisma](file:///d:/resort/prisma/schema.prisma) | Schema CSDL PostgreSQL chuẩn hóa đầy đủ quan hệ và chỉ mục |
-| [prisma/seed.ts](file:///d:/resort/prisma/seed.ts) | Kịch bản seed dữ liệu mẫu cho 5 vai trò, 3 loại phòng và 60 ngày tồn kho |
-| [docker-compose.yml](file:///d:/resort/docker-compose.yml) | Cấu hình chạy PostgreSQL 16 trên Docker cục bộ |
-| [src/server/lib/db.ts](file:///d:/resort/src/server/lib/db.ts) | Singleton Prisma client chống rò rỉ connection pool |
-| [package.json](file:///d:/resort/package.json) | Bổ sung các script `db:generate`, `db:validate`, `db:push`, `db:seed` |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 2 |
+| [src/server/lib/auth.ts](file:///d:/resort/src/server/lib/auth.ts) | Bcrypt hash, jose JWT session tokens và cấu hình HttpOnly cookie |
+| [src/server/middleware/rbac.ts](file:///d:/resort/src/server/middleware/rbac.ts) | RBAC server-side guard và hàm `assertOwnership` chống IDOR |
+| [src/server/services/auth.service.ts](file:///d:/resort/src/server/services/auth.service.ts) | Service xử lý đăng nhập, cấp token, đăng ký tài khoản khách |
+| [src/app/api/auth/login/route.ts](file:///d:/resort/src/app/api/auth/login/route.ts) | API đăng nhập và cấp cookie phiên an toàn |
+| [src/app/api/auth/logout/route.ts](file:///d:/resort/src/app/api/auth/logout/route.ts) | API đăng xuất và thu hồi session cookie |
+| [src/app/api/auth/me/route.ts](file:///d:/resort/src/app/api/auth/me/route.ts) | API kiểm tra thông tin phiên làm việc hiện tại |
+| [tests/auth-rbac.test.mjs](file:///d:/resort/tests/auth-rbac.test.mjs) | Bộ kiểm thử an ninh Auth, RBAC và Anti-IDOR |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 3 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Prisma Schema Validation:** `npx prisma validate` $\rightarrow$ Valid 🚀.
-- **Client Generation:** `npx prisma generate` $\rightarrow$ Sinh Prisma Client v6.4.1 thành công.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ Thành công trong 325ms, không có lỗi TypeScript hay linter.
+- **Unit & Security Tests:** `node --test tests/auth-rbac.test.mjs` $\rightarrow$ **9/9 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ 7/7 routes biên dịch thành công không có lỗi type/lint.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần khởi động container PostgreSQL (`docker compose up -d`) khi muốn chạy migrate trực tiếp trên máy cục bộ hoặc kết nối database cloud.
+- Cần tích hợp cơ chế Rate-limit (`SEC-06`) trước khi đưa lên môi trường production công khai.
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 3: Xác thực & Phân quyền (`SEC-02`, `SEC-03`, `SEC-04`):**
-  - Xây dựng Auth Service: Hash mật khẩu (Bcrypt/Argon2id), cấp phát và xác thực session token an toàn qua Cookie `HttpOnly`.
-  - Xây dựng Middleware Server-side RBAC (chặn theo vai trò `Customer`, `Receptionist`, `Driver`, `Dispatcher`, `Admin`).
-  - Xây dựng cơ chế kiểm tra quyền sở hữu tài nguyên để chống IDOR (`SEC-04`).
+- **Roadmap Giai đoạn 4: Inventory Transaction Engine (`BOOK-01`, `BOOK-02`, `BOOK-03`):**
+  - Xây dựng Service tính toán tồn kho theo từng đêm (`nightly inventory`), xử lý ranh giới check-in / check-out.
+  - Thuật toán trừ tồn kho nguyên tử (`Atomic Conditional Lock`) với nguyên tắc *"First successful atomic commit wins"*.
+  - Viết bài kiểm thử đồng thời (Concurrency Test: `Inventory = 1`) kiểm chứng chống overbooking tuyệt đối.
+
 
 
