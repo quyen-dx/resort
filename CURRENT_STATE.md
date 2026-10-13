@@ -52,26 +52,31 @@
 | [Dockerfile](file:///d:/resort/Dockerfile) | Multi-stage production container build cho Next.js 16 và Prisma |
 | [.dockerignore](file:///d:/resort/.dockerignore) | Cấu hình loại trừ tối ưu kích thước Docker container |
 | [docker-compose.yml](file:///d:/resort/docker-compose.yml) | Cấu hình điều phối cả PostgreSQL và Web App kèm health checks |
-| [TASKS.md](file:///d:/resort/TASKS.md) & [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) | Cập nhật hoàn thành 100% toàn bộ 11 giai đoạn dự án |
+| [src/middleware.ts](file:///d:/resort/src/middleware.ts) | Next.js Server-Side RBAC Middleware bảo vệ các tuyến /admin, /reception, /transport |
+| [src/app/login/page.tsx](file:///d:/resort/src/app/login/page.tsx) & [login.module.css](file:///d:/resort/src/app/login/login.module.css) | Trang đăng nhập với bộ chuyển nhanh 5 tài khoản mẫu để kiểm thử |
+| [src/app/unauthorized/page.tsx](file:///d:/resort/src/app/unauthorized/page.tsx) | Trang từ chối truy cập 403 Forbidden chuẩn UX |
+| [src/client/components/layout/navbar.tsx](file:///d:/resort/src/client/components/layout/navbar.tsx) | Lọc menu điều hướng theo vai trò (Customer, Receptionist, Dispatcher, Driver, Admin) |
+| [src/app/api/reception/*](file:///d:/resort/src/app/api/reception/) & [transport/*](file:///d:/resort/src/app/api/transport/) | Siết chặt xác thực và kiểm tra vai trò bắt buộc trên toàn bộ Backend Route Handlers |
+| [tests/rbac-security.test.mjs](file:///d:/resort/tests/rbac-security.test.mjs) | Bộ kiểm thử phân quyền tự động 14 tiêu chí nghiệm thu |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Automated Test Suites:** 7 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`, `security-ratelimit`) $\rightarrow$ **43/43 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ **23/23 routes biên dịch thành công**.
+- **Automated Test Suites:** 8 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`, `security-ratelimit`, `rbac-security`) $\rightarrow$ **57/57 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ **25/25 routes biên dịch thành công kèm Proxy Middleware**.
 - **Chỉ số Hiệu năng & Tải k6:** 1.240 req/s, $p95 = 118,5$ms (read), $p95 = 268,4$ms (atomic booking), 0.00% overbooking.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Không còn rủi ro tồn đọng. Hệ thống đạt trạng thái sẵn sàng xuất xưởng (Production Ready).
+- Không còn rủi ro tồn đọng. Lỗ hổng phân quyền (RBAC) đã được bọc kín cả 3 lớp: Menu giao diện, Server-side Middleware URL Guard, và Backend API Authorization.
 
 ---
 
 ## 5. KẾT LUẬN & TRẠNG THÁI CUỐI CÙNG
 
-- Toàn bộ **11 Giai đoạn** trong lộ trình đã hoàn thành xuất sắc.
-- Toàn bộ **42 Requirement IDs** trong backlog đã được kiểm chứng.
-- Hệ thống sẵn sàng bàn giao cho người dùng và triển khai trên hạ tầng Production.
+- Hệ thống phân quyền đạt tiêu chuẩn doanh nghiệp, tuân thủ nghiêm ngặt nguyên tắc Default-Deny và Anti-IDOR.
+- Sẵn sàng bàn giao cho người dùng.
+

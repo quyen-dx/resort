@@ -134,23 +134,16 @@ export default function DriverMobilePortalPage() {
       )}
 
       <main className={styles.contentContainer}>
-        {/* Driver Selector (Giả lập tài xế đang đăng nhập) */}
+        {/* Driver Account Info (Khóa theo tài khoản đăng nhập) */}
         <div className={styles.driverSelectorBox}>
           <label className={styles.driverLabel}>
-            Tài khoản lái xe hiện tại
+            Tài xế đang nhận nhiệm vụ
           </label>
-          <select
-            value={selectedDriverId}
-            onChange={(e) => setSelectedDriverId(e.target.value)}
-            className={styles.driverSelect}
-          >
-            {drivers.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.fullName} ({d.phoneNumber})
-              </option>
-            ))}
-          </select>
+          <div style={{ fontWeight: 700, color: 'var(--color-primary)', fontSize: '1rem', marginTop: '4px' }}>
+            {activeDriver?.fullName || 'Tài xế Resort'}
+          </div>
         </div>
+
 
         {/* Trips List */}
         <div>

@@ -193,11 +193,19 @@ export class BookingService {
     }
 
     // If booking is tied to a user account, enforce strict ownership (SEC-04)
-    if (booking.customerId && sessionUser) {
+    if (booking.customerId) {
+      if (!sessionUser) {
+        throw new AppError(
+          'UNAUTHORIZED',
+          'Vui lòng đăng nhập để xem thông tin đặt phòng của tài khoản này.',
+          401
+        );
+      }
       assertOwnership(sessionUser, booking.customerId, ['ADMIN', 'RECEPTIONIST']);
     }
 
     return booking;
+
   }
 
   /**

@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { bookingService } from '@/server/services/booking.service';
 import { authService } from '@/server/services/auth.service';
 import { COOKIE_CONFIG } from '@/server/lib/auth';
+import { requireRole } from '@/server/middleware/rbac';
 import { AppError } from '@/server/core/errors/app-error';
+
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,13 +21,9 @@ export async function POST(req: NextRequest) {
     const token = req.cookies.get(COOKIE_CONFIG.name)?.value;
     const sessionUser = token ? await authService.verifyToken(token) : null;
 
-    // Default to receptionist session if logged in or mock desk session
-    const receptionist = sessionUser || {
-      id: 'rec-desk-system',
-      email: 'reception@annamresort.vn',
-      fullName: 'Trần Thị Lễ Tân',
-      role: 'RECEPTIONIST' as const,
-    };
+    // Strict Server-Side RBAC (SEC-03): Only RECEPTIONIST and ADMIN can check-in guests
+    const receptionist = requireRole(sessionUser, 'RECEPTIONIST', 'ADMIN');
+
 
     const updatedBooking = await bookingService.checkIn(
       bookingCode,

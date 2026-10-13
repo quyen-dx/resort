@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { receptionService } from '@/server/services/reception.service';
 import { authService } from '@/server/services/auth.service';
 import { COOKIE_CONFIG } from '@/server/lib/auth';
+import { requireRole } from '@/server/middleware/rbac';
 import { AppError } from '@/server/core/errors/app-error';
 
 export async function POST(req: NextRequest) {
@@ -19,12 +20,9 @@ export async function POST(req: NextRequest) {
     const token = req.cookies.get(COOKIE_CONFIG.name)?.value;
     const sessionUser = token ? await authService.verifyToken(token) : null;
 
-    const receptionist = sessionUser || {
-      id: 'rec-desk-system',
-      email: 'reception@annamresort.vn',
-      fullName: 'Trần Thị Lễ Tân',
-      role: 'RECEPTIONIST' as const,
-    };
+    // Strict Server-Side RBAC (SEC-03): Only RECEPTIONIST and ADMIN can process checkout
+    const receptionist = requireRole(sessionUser, 'RECEPTIONIST', 'ADMIN');
+
 
     const updated = await receptionService.processCheckOut(
       bookingId,

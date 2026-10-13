@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/server/lib/db';
 import { logger } from '@/server/lib/logger';
+import { COOKIE_CONFIG } from '@/server/lib/auth';
+import { authService } from '@/server/services/auth.service';
+
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
@@ -33,6 +36,16 @@ export async function GET(request: NextRequest) {
   const memory = process.memoryUsage();
   const totalDurationMs = Date.now() - startTime;
 
+  // Only ADMIN is allowed to view internal diagnostic logs
+  let recentLogs: ReturnType<typeof logger.getRecentLogs> | undefined = undefined;
+  if (includeLogs) {
+    const token = request.cookies.get(COOKIE_CONFIG.name)?.value;
+    const session = token ? await authService.verifyToken(token) : null;
+    if (session?.role === 'ADMIN') {
+      recentLogs = logger.getRecentLogs(25);
+    }
+  }
+
   const healthData = {
     status: overallStatus,
     timestamp: new Date().toISOString(),
@@ -55,8 +68,9 @@ export async function GET(request: NextRequest) {
       },
     },
     checkDurationMs: totalDurationMs,
-    recentLogs: includeLogs ? logger.getRecentLogs(25) : undefined,
+    recentLogs,
   };
+
 
   logger.info(`Health check probe: ${overallStatus}`, { dbStatus, dbLatencyMs }, requestId);
 
