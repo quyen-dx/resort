@@ -5,11 +5,47 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('--- Bắt đầu khởi tạo dữ liệu mẫu (Seeding Database) ---');
 
-  // 1. Khởi tạo 5 tài khoản mẫu cho 5 vai trò (SEC-03)
-  // Password hash mẫu (mật khẩu mặc định: 'Resort@2026')
-  const defaultPasswordHash = '$2b$12$e6i.q1G9f2O6mK1Tj3K.1uvvQpI8fX4tZ3u4dE/Uu3Gz4kL9Z2YGy';
+  // Mật khẩu mặc định: '123456'
+  const defaultPasswordHash = '$2b$10$GFVLU92fqv04A3oqGr7ote4X0r7YJKyTRVCaxRCHv6Li/45MwSUty';
 
   const users = [
+    // Standard accounts (@resort.com)
+    {
+      email: 'admin@resort.com',
+      fullName: 'Nguyễn Văn Quản Trị',
+      phoneNumber: '0901000001',
+      role: UserRole.ADMIN,
+      passwordHash: defaultPasswordHash,
+    },
+    {
+      email: 'reception@resort.com',
+      fullName: 'Trần Thị Lễ Tân',
+      phoneNumber: '0901000002',
+      role: UserRole.RECEPTIONIST,
+      passwordHash: defaultPasswordHash,
+    },
+    {
+      email: 'dispatch@resort.com',
+      fullName: 'Lê Hoàng Điều Phối',
+      phoneNumber: '0901000003',
+      role: UserRole.DISPATCHER,
+      passwordHash: defaultPasswordHash,
+    },
+    {
+      email: 'driver@resort.com',
+      fullName: 'Phạm Minh Tài Xế',
+      phoneNumber: '0901000004',
+      role: UserRole.DRIVER,
+      passwordHash: defaultPasswordHash,
+    },
+    {
+      email: 'guest@resort.com',
+      fullName: 'Đặng Tuấn Khách',
+      phoneNumber: '0912345678',
+      role: UserRole.CUSTOMER,
+      passwordHash: defaultPasswordHash,
+    },
+    // Domain aliases (@annamresort.vn)
     {
       email: 'admin@annamresort.vn',
       fullName: 'Nguyễn Văn Quản Trị',
@@ -46,6 +82,7 @@ async function main() {
       passwordHash: defaultPasswordHash,
     },
   ];
+
 
   for (const u of users) {
     await prisma.user.upsert({
