@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { formatVND } from '@/client/utils/currency';
 import { formatDateVN } from '@/client/utils/date';
 import { Badge } from '@/client/components/ui/badge';
+import styles from './reception.module.css';
 
 interface DeskBooking {
   id: string;
@@ -162,41 +163,23 @@ export default function ReceptionDashboard() {
   );
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#f4f6f5', display: 'flex', flexDirection: 'column' }}>
+    <div className={styles.pageWrapper}>
       {/* Top Header */}
-      <header
-        style={{
-          backgroundColor: 'var(--color-primary)',
-          color: 'white',
-          padding: '1rem 2rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          boxShadow: 'var(--shadow-md)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <Link href="/" style={{ color: 'var(--color-accent)', fontWeight: 800, fontSize: '1.25rem', fontFamily: 'var(--font-serif)' }}>
+      <header className={styles.header}>
+        <div className={styles.headerBrandGroup}>
+          <Link href="/" className={styles.headerBrandLink}>
             AN NAM RESORT
           </Link>
-          <span style={{ color: 'rgba(255,255,255,0.4)' }}>|</span>
-          <span style={{ fontSize: '1rem', fontWeight: 600 }}>Quầy Lễ Tân &amp; Điều Hành Vận Hành (Front Desk)</span>
+          <span className={styles.headerDivider}>|</span>
+          <span className={styles.headerTitle}>Quầy Lễ Tân &amp; Điều Hành Vận Hành (Front Desk)</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', fontSize: '0.88rem' }}>
+        <div className={styles.headerUserGroup}>
           <div>
-            <span style={{ color: 'rgba(255,255,255,0.7)' }}>Nhân viên trực: </span>
-            <strong style={{ color: 'var(--color-accent)' }}>Trần Thị Lễ Tân</strong>
+            <span className={styles.userLabel}>Nhân viên trực: </span>
+            <strong className={styles.userName}>Trần Thị Lễ Tân</strong>
           </div>
-          <Link
-            href="/rooms"
-            style={{
-              backgroundColor: 'rgba(255,255,255,0.15)',
-              padding: '0.4rem 0.85rem',
-              borderRadius: 'var(--radius-sm)',
-              color: 'white',
-            }}
-          >
+          <Link href="/rooms" className={styles.customerPortalLink}>
             Trang Đặt Phòng Khách →
           </Link>
         </div>
@@ -204,65 +187,30 @@ export default function ReceptionDashboard() {
 
       {/* Toast Notification */}
       {notification && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '4.5rem',
-            right: '2rem',
-            zIndex: 100,
-            backgroundColor: notification.type === 'success' ? '#13653f' : '#dc2626',
-            color: 'white',
-            padding: '0.85rem 1.5rem',
-            borderRadius: 'var(--radius-sm)',
-            boxShadow: 'var(--shadow-lg)',
-            fontSize: '0.92rem',
-            fontWeight: 600,
-          }}
-        >
+        <div className={`${styles.toast} ${notification.type === 'success' ? styles.toastSuccess : styles.toastError}`}>
           {notification.message}
         </div>
       )}
 
       {/* Main Container */}
-      <div style={{ maxWidth: '1350px', margin: '2rem auto', width: '100%', padding: '0 1.5rem', flex: 1 }}>
+      <div className={styles.mainContainer}>
         {/* Navigation Tabs */}
-        <div style={{ display: 'flex', gap: '0.5rem', borderBottom: '2px solid var(--border-medium)', marginBottom: '1.5rem' }}>
+        <div className={styles.tabList}>
           <button
             onClick={() => setActiveTab('checkin')}
-            style={{
-              padding: '0.85rem 1.75rem',
-              fontWeight: 700,
-              fontSize: '0.95rem',
-              borderBottom: activeTab === 'checkin' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              color: activeTab === 'checkin' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              marginBottom: '-2px',
-            }}
+            className={`${styles.tabButton} ${activeTab === 'checkin' ? styles.tabButtonActive : ''}`}
           >
             📋 Khách Đến Check-in ({checkInList.length})
           </button>
           <button
             onClick={() => setActiveTab('inhouse')}
-            style={{
-              padding: '0.85rem 1.75rem',
-              fontWeight: 700,
-              fontSize: '0.95rem',
-              borderBottom: activeTab === 'inhouse' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              color: activeTab === 'inhouse' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              marginBottom: '-2px',
-            }}
+            className={`${styles.tabButton} ${activeTab === 'inhouse' ? styles.tabButtonActive : ''}`}
           >
             🏨 Đang Lưu Trú &amp; Công Nợ ({inHouseList.length})
           </button>
           <button
             onClick={() => setActiveTab('receipts')}
-            style={{
-              padding: '0.85rem 1.75rem',
-              fontWeight: 700,
-              fontSize: '0.95rem',
-              borderBottom: activeTab === 'receipts' ? '3px solid var(--color-primary)' : '3px solid transparent',
-              color: activeTab === 'receipts' ? 'var(--color-primary)' : 'var(--color-text-muted)',
-              marginBottom: '-2px',
-            }}
+            className={`${styles.tabButton} ${activeTab === 'receipts' ? styles.tabButtonActive : ''}`}
           >
             🧾 Phiếu Thu Tiền Tại Quầy ({allReceipts.length})
           </button>
@@ -270,52 +218,52 @@ export default function ReceptionDashboard() {
 
         {/* TAB 1: Check-in Desk */}
         {activeTab === 'checkin' && (
-          <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
-            <h2 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', marginBottom: '1.25rem', fontWeight: 700 }}>
+          <div className={styles.cardContainer}>
+            <h2 className={styles.cardTitle}>
               Danh Sách Đơn Đặt Phòng Chờ Làm Thủ Tục Check-in
             </h2>
 
             {checkInList.length === 0 ? (
-              <p style={{ color: 'var(--color-text-muted)', padding: '2rem 0', textAlign: 'center' }}>
+              <p className={styles.emptyText}>
                 Hiện không có đơn nào đang chờ check-in hôm nay.
               </p>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
                   <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-subtle)', color: 'var(--color-text-muted)' }}>
-                      <th style={{ padding: '0.75rem' }}>Mã Đặt Phòng</th>
-                      <th style={{ padding: '0.75rem' }}>Khách Hàng</th>
-                      <th style={{ padding: '0.75rem' }}>Loại Phòng</th>
-                      <th style={{ padding: '0.75rem' }}>Lưu Trú</th>
-                      <th style={{ padding: '0.75rem' }}>Tổng Tiền (VND)</th>
-                      <th style={{ padding: '0.75rem' }}>Gán Số Phòng Vật Lý</th>
-                      <th style={{ padding: '0.75rem' }}>Hành Động</th>
+                    <tr className={styles.tableHeaderRow}>
+                      <th className={styles.th}>Mã Đặt Phòng</th>
+                      <th className={styles.th}>Khách Hàng</th>
+                      <th className={styles.th}>Loại Phòng</th>
+                      <th className={styles.th}>Lưu Trú</th>
+                      <th className={styles.th}>Tổng Tiền (VND)</th>
+                      <th className={styles.th}>Gán Số Phòng Vật Lý</th>
+                      <th className={styles.th}>Hành Động</th>
                     </tr>
                   </thead>
                   <tbody>
                     {checkInList.map((booking) => {
                       const availRooms = booking.roomType.physicalRooms?.filter((r) => r.status === 'AVAILABLE') || [];
                       return (
-                        <tr key={booking.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                          <td style={{ padding: '0.75rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                        <tr key={booking.id} className={styles.tableRow}>
+                          <td className={`${styles.td} ${styles.bookingCode}`}>
                             {booking.bookingCode}
                           </td>
-                          <td style={{ padding: '0.75rem' }}>
-                            <div style={{ fontWeight: 600 }}>{booking.customerName}</div>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{booking.customerPhone}</div>
+                          <td className={styles.td}>
+                            <div className={styles.customerName}>{booking.customerName}</div>
+                            <div className={styles.customerSub}>{booking.customerPhone}</div>
                           </td>
-                          <td style={{ padding: '0.75rem' }}>
+                          <td className={styles.td}>
                             <Badge variant="gold">{booking.roomType.name}</Badge>
                           </td>
-                          <td style={{ padding: '0.75rem' }}>
+                          <td className={styles.td}>
                             <div>{formatDateVN(booking.checkInDate)} → {formatDateVN(booking.checkOutDate)}</div>
-                            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>({booking.totalNights} đêm)</div>
+                            <div className={styles.customerSub}>({booking.totalNights} đêm)</div>
                           </td>
-                          <td style={{ padding: '0.75rem', fontWeight: 700, color: 'var(--color-primary)' }}>
+                          <td className={`${styles.td} ${styles.amountPrimary}`}>
                             {formatVND(booking.amountDue)}
                           </td>
-                          <td style={{ padding: '0.75rem' }}>
+                          <td className={styles.td}>
                             <select
                               value={selectedRoomAssignments[booking.bookingCode] || ''}
                               onChange={(e) =>
@@ -324,13 +272,7 @@ export default function ReceptionDashboard() {
                                   [booking.bookingCode]: e.target.value,
                                 })
                               }
-                              style={{
-                                padding: '0.45rem 0.65rem',
-                                borderRadius: 'var(--radius-sm)',
-                                border: '1px solid var(--border-medium)',
-                                backgroundColor: 'white',
-                                fontSize: '0.85rem',
-                              }}
+                              className={styles.roomSelect}
                             >
                               <option value="">-- Chọn số phòng --</option>
                               {availRooms.map((r) => (
@@ -340,17 +282,10 @@ export default function ReceptionDashboard() {
                               ))}
                             </select>
                           </td>
-                          <td style={{ padding: '0.75rem' }}>
+                          <td className={styles.td}>
                             <button
                               onClick={() => handleCheckIn(booking)}
-                              style={{
-                                backgroundColor: 'var(--color-primary)',
-                                color: 'white',
-                                padding: '0.5rem 1rem',
-                                borderRadius: 'var(--radius-sm)',
-                                fontWeight: 600,
-                                fontSize: '0.85rem',
-                              }}
+                              className={styles.actionButtonCheckIn}
                             >
                               Xác Nhận Check-in
                             </button>
@@ -367,63 +302,54 @@ export default function ReceptionDashboard() {
 
         {/* TAB 2: In-House Guests & Counter Payments */}
         {activeTab === 'inhouse' && (
-          <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
-            <h2 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', marginBottom: '1.25rem', fontWeight: 700 }}>
+          <div className={styles.cardContainer}>
+            <h2 className={styles.cardTitle}>
               Khách Đang Lưu Trú &amp; Quản Lý Thanh Toán Quầy (BIZ-01)
             </h2>
 
             {inHouseList.length === 0 ? (
-              <p style={{ color: 'var(--color-text-muted)', padding: '2rem 0', textAlign: 'center' }}>
+              <p className={styles.emptyText}>
                 Hiện không có khách nào đang lưu trú.
               </p>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
                   <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-subtle)', color: 'var(--color-text-muted)' }}>
-                      <th style={{ padding: '0.75rem' }}>Số Phòng</th>
-                      <th style={{ padding: '0.75rem' }}>Mã Booking</th>
-                      <th style={{ padding: '0.75rem' }}>Khách Hàng</th>
-                      <th style={{ padding: '0.75rem' }}>Phải Thu</th>
-                      <th style={{ padding: '0.75rem' }}>Đã Thanh Toán</th>
-                      <th style={{ padding: '0.75rem' }}>Còn Nợ (Balance)</th>
-                      <th style={{ padding: '0.75rem' }}>Thao Tác Quầy</th>
+                    <tr className={styles.tableHeaderRow}>
+                      <th className={styles.th}>Số Phòng</th>
+                      <th className={styles.th}>Mã Booking</th>
+                      <th className={styles.th}>Khách Hàng</th>
+                      <th className={styles.th}>Phải Thu</th>
+                      <th className={styles.th}>Đã Thanh Toán</th>
+                      <th className={styles.th}>Còn Nợ (Balance)</th>
+                      <th className={styles.th}>Thao Tác Quầy</th>
                     </tr>
                   </thead>
                   <tbody>
                     {inHouseList.map((booking) => (
-                      <tr key={booking.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                        <td style={{ padding: '0.75rem' }}>
-                          <span
-                            style={{
-                              backgroundColor: 'rgba(15, 42, 36, 0.1)',
-                              color: 'var(--color-primary)',
-                              fontWeight: 800,
-                              padding: '0.35rem 0.75rem',
-                              borderRadius: 'var(--radius-sm)',
-                              fontSize: '0.95rem',
-                            }}
-                          >
+                      <tr key={booking.id} className={styles.tableRow}>
+                        <td className={styles.td}>
+                          <span className={styles.roomTag}>
                             Phòng {booking.assignedRoom?.roomNumber || 'Chưa gán'}
                           </span>
                         </td>
-                        <td style={{ padding: '0.75rem', fontWeight: 600 }}>{booking.bookingCode}</td>
-                        <td style={{ padding: '0.75rem' }}>
-                          <div style={{ fontWeight: 600 }}>{booking.customerName}</div>
-                          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{booking.customerPhone}</div>
+                        <td className={styles.td}><strong>{booking.bookingCode}</strong></td>
+                        <td className={styles.td}>
+                          <div className={styles.customerName}>{booking.customerName}</div>
+                          <div className={styles.customerSub}>{booking.customerPhone}</div>
                         </td>
-                        <td style={{ padding: '0.75rem', fontWeight: 600 }}>{formatVND(booking.amountDue)}</td>
-                        <td style={{ padding: '0.75rem', color: 'var(--color-success)', fontWeight: 600 }}>
+                        <td className={`${styles.td} ${styles.amountPrimary}`}>{formatVND(booking.amountDue)}</td>
+                        <td className={`${styles.td} ${styles.amountSuccess}`}>
                           {formatVND(booking.amountPaid)}
                         </td>
-                        <td style={{ padding: '0.75rem' }}>
+                        <td className={styles.td}>
                           {booking.balance > 0 ? (
-                            <strong style={{ color: 'var(--color-danger)' }}>{formatVND(booking.balance)}</strong>
+                            <strong className={styles.amountDebt}>{formatVND(booking.balance)}</strong>
                           ) : (
                             <Badge variant="success">Đã thanh toán đủ</Badge>
                           )}
                         </td>
-                        <td style={{ padding: '0.75rem' }}>
+                        <td className={styles.td}>
                           <div style={{ display: 'flex', gap: '0.5rem' }}>
                             {booking.balance > 0 && (
                               <button
@@ -431,14 +357,7 @@ export default function ReceptionDashboard() {
                                   setPaymentModalBooking(booking);
                                   setPaymentAmount(booking.balance);
                                 }}
-                                style={{
-                                  backgroundColor: 'var(--color-accent)',
-                                  color: 'var(--color-primary-dark)',
-                                  padding: '0.45rem 0.85rem',
-                                  borderRadius: 'var(--radius-sm)',
-                                  fontWeight: 700,
-                                  fontSize: '0.82rem',
-                                }}
+                                className={styles.actionButtonPay}
                               >
                                 Thu Tiền Quầy
                               </button>
@@ -447,14 +366,7 @@ export default function ReceptionDashboard() {
                               onClick={() => {
                                 setCheckoutModalBooking(booking);
                               }}
-                              style={{
-                                backgroundColor: 'var(--color-primary)',
-                                color: 'white',
-                                padding: '0.45rem 0.85rem',
-                                borderRadius: 'var(--radius-sm)',
-                                fontWeight: 600,
-                                fontSize: '0.82rem',
-                              }}
+                              className={styles.actionButtonCheckOut}
                             >
                               Check-out
                             </button>
@@ -471,45 +383,45 @@ export default function ReceptionDashboard() {
 
         {/* TAB 3: Receipts Audit */}
         {activeTab === 'receipts' && (
-          <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', padding: '1.5rem', boxShadow: 'var(--shadow-sm)' }}>
-            <h2 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', marginBottom: '1.25rem', fontWeight: 700 }}>
+          <div className={styles.cardContainer}>
+            <h2 className={styles.cardTitle}>
               Nhật Ký Phiếu Thu &amp; Đối Soát Doanh Thu Quầy (Audit Trail - BIZ-01)
             </h2>
 
             {allReceipts.length === 0 ? (
-              <p style={{ color: 'var(--color-text-muted)', padding: '2rem 0', textAlign: 'center' }}>
+              <p className={styles.emptyText}>
                 Chưa có phiếu thu nào được ghi nhận.
               </p>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+              <div className={styles.tableWrapper}>
+                <table className={styles.table}>
                   <thead>
-                    <tr style={{ borderBottom: '2px solid var(--border-subtle)', color: 'var(--color-text-muted)' }}>
-                      <th style={{ padding: '0.75rem' }}>Số Phiếu Thu</th>
-                      <th style={{ padding: '0.75rem' }}>Mã Booking</th>
-                      <th style={{ padding: '0.75rem' }}>Khách Hàng</th>
-                      <th style={{ padding: '0.75rem' }}>Số Tiền Thu</th>
-                      <th style={{ padding: '0.75rem' }}>Hình Thức</th>
-                      <th style={{ padding: '0.75rem' }}>Nhân Viên Thu</th>
-                      <th style={{ padding: '0.75rem' }}>Thời Gian</th>
+                    <tr className={styles.tableHeaderRow}>
+                      <th className={styles.th}>Số Phiếu Thu</th>
+                      <th className={styles.th}>Mã Booking</th>
+                      <th className={styles.th}>Khách Hàng</th>
+                      <th className={styles.th}>Số Tiền Thu</th>
+                      <th className={styles.th}>Hình Thức</th>
+                      <th className={styles.th}>Nhân Viên Thu</th>
+                      <th className={styles.th}>Thời Gian</th>
                     </tr>
                   </thead>
                   <tbody>
                     {allReceipts.map((rec) => (
-                      <tr key={rec.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                        <td style={{ padding: '0.75rem', fontWeight: 800, color: 'var(--color-accent-dark)' }}>
+                      <tr key={rec.id} className={styles.tableRow}>
+                        <td className={styles.td} style={{ fontWeight: 800, color: 'var(--color-accent-dark)' }}>
                           {rec.receiptNumber}
                         </td>
-                        <td style={{ padding: '0.75rem', fontWeight: 600 }}>{rec.bookingCode}</td>
-                        <td style={{ padding: '0.75rem' }}>{rec.customerName}</td>
-                        <td style={{ padding: '0.75rem', fontWeight: 800, color: 'var(--color-success)' }}>
+                        <td className={styles.td}><strong>{rec.bookingCode}</strong></td>
+                        <td className={styles.td}>{rec.customerName}</td>
+                        <td className={`${styles.td} ${styles.amountSuccess}`} style={{ fontWeight: 800 }}>
                           {formatVND(rec.amount)}
                         </td>
-                        <td style={{ padding: '0.75rem' }}>
+                        <td className={styles.td}>
                           <Badge variant="gray">{rec.method}</Badge>
                         </td>
-                        <td style={{ padding: '0.75rem' }}>{rec.actor?.fullName || 'Trần Thị Lễ Tân'}</td>
-                        <td style={{ padding: '0.75rem', color: 'var(--color-text-muted)' }}>
+                        <td className={styles.td}>{rec.actor?.fullName || 'Trần Thị Lễ Tân'}</td>
+                        <td className={styles.td} style={{ color: 'var(--color-text-muted)' }}>
                           {new Date(rec.createdAt).toLocaleTimeString('vi-VN')} {formatDateVN(rec.createdAt)}
                         </td>
                       </tr>
@@ -524,33 +436,18 @@ export default function ReceptionDashboard() {
 
       {/* Counter Payment Modal */}
       {paymentModalBooking && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(5px)',
-            zIndex: 100,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem',
-          }}
-        >
-          <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', width: '100%', maxWidth: '480px', padding: '1.75rem' }}>
-            <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.modalTitle}>
               Thu Tiền Tại Quầy Lễ Tân
             </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1.25rem' }}>
+            <p className={styles.modalSubtitle}>
               Booking: <strong>{paymentModalBooking.bookingCode}</strong> • Khách: <strong>{paymentModalBooking.customerName}</strong>
             </p>
 
             <form onSubmit={handlePaymentSubmit}>
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+              <div className={styles.formGroup}>
+                <label className={styles.fieldLabel}>
                   Số tiền thu (VND) *
                 </label>
                 <input
@@ -560,35 +457,21 @@ export default function ReceptionDashboard() {
                   max={paymentModalBooking.balance}
                   value={paymentAmount}
                   onChange={(e) => setPaymentAmount(parseInt(e.target.value, 10))}
-                  style={{
-                    width: '100%',
-                    padding: '0.65rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-medium)',
-                    fontSize: '1.1rem',
-                    fontWeight: 700,
-                    color: 'var(--color-primary)',
-                  }}
+                  className={styles.inputNumber}
                 />
                 <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
                   Còn nợ: {formatVND(paymentModalBooking.balance)}
                 </span>
               </div>
 
-              <div style={{ marginBottom: '1rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+              <div className={styles.formGroup}>
+                <label className={styles.fieldLabel}>
                   Phương thức thanh toán *
                 </label>
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value as 'COUNTER_CASH' | 'COUNTER_TRANSFER' | 'COUNTER_CARD')}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-medium)',
-                    backgroundColor: 'white',
-                  }}
+                  className={styles.inputSelect}
                 >
                   <option value="COUNTER_CASH">💵 Tiền mặt tại quầy</option>
                   <option value="COUNTER_TRANSFER">📲 Chuyển khoản ngân hàng (QR Code)</option>
@@ -596,8 +479,8 @@ export default function ReceptionDashboard() {
                 </select>
               </div>
 
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+              <div className={styles.formGroupLast}>
+                <label className={styles.fieldLabel}>
                   Ghi chú phiếu thu
                 </label>
                 <input
@@ -605,32 +488,21 @@ export default function ReceptionDashboard() {
                   placeholder="Khách đặt cọc trước hoặc thanh toán toàn phần"
                   value={paymentNotes}
                   onChange={(e) => setPaymentNotes(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-medium)',
-                  }}
+                  className={styles.inputText}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <div className={styles.modalActions}>
                 <button
                   type="button"
                   onClick={() => setPaymentModalBooking(null)}
-                  style={{ padding: '0.65rem 1.25rem', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)' }}
+                  className={styles.modalCancelBtn}
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  style={{
-                    backgroundColor: 'var(--color-accent)',
-                    color: 'var(--color-primary-dark)',
-                    padding: '0.65rem 1.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontWeight: 800,
-                  }}
+                  className={styles.modalSubmitBtn}
                 >
                   Xác Nhận &amp; Xuất Phiếu Thu
                 </button>
@@ -642,43 +514,28 @@ export default function ReceptionDashboard() {
 
       {/* Check-out Modal */}
       {checkoutModalBooking && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(5px)',
-            zIndex: 100,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '1rem',
-          }}
-        >
-          <div style={{ backgroundColor: 'white', borderRadius: 'var(--radius-lg)', width: '100%', maxWidth: '480px', padding: '1.75rem' }}>
-            <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', fontWeight: 700, marginBottom: '0.5rem' }}>
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3 className={styles.modalTitle}>
               Xác Nhận Check-out &amp; Trả Phòng
             </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1.25rem' }}>
+            <p className={styles.modalSubtitle}>
               Phòng <strong>{checkoutModalBooking.assignedRoom?.roomNumber}</strong> • Khách: <strong>{checkoutModalBooking.customerName}</strong>
             </p>
 
             {checkoutModalBooking.balance > 0 ? (
-              <div style={{ backgroundColor: '#fff5f5', border: '1px solid #fed7d7', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem', color: '#c53030', fontSize: '0.88rem' }}>
+              <div className={styles.debtWarning}>
                 ⚠️ <strong>Cảnh báo công nợ:</strong> Khách hàng vẫn còn nợ <strong>{formatVND(checkoutModalBooking.balance)}</strong>. Vui lòng thu tiền tại quầy trước khi hoàn tất check-out!
               </div>
             ) : (
-              <div style={{ backgroundColor: '#f0fff4', border: '1px solid #c6f6d5', padding: '1rem', borderRadius: 'var(--radius-sm)', marginBottom: '1.25rem', color: '#276749', fontSize: '0.88rem' }}>
+              <div className={styles.paidSuccessNotice}>
                 ✓ Khách hàng đã thanh toán đủ 100% công nợ. Sẵn sàng trả phòng.
               </div>
             )}
 
             <form onSubmit={handleCheckOutSubmit}>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+              <div className={styles.formGroupLast}>
+                <label className={styles.fieldLabel}>
                   Ngày trả phòng thực tế (Actual Check-out)
                 </label>
                 <input
@@ -686,32 +543,21 @@ export default function ReceptionDashboard() {
                   required
                   value={actualCheckOutDate}
                   onChange={(e) => setActualCheckOutDate(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--border-medium)',
-                  }}
+                  className={styles.inputText}
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>
+              <div className={styles.modalActions}>
                 <button
                   type="button"
                   onClick={() => setCheckoutModalBooking(null)}
-                  style={{ padding: '0.65rem 1.25rem', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)' }}
+                  className={styles.modalCancelBtn}
                 >
                   Đóng
                 </button>
                 <button
                   type="submit"
-                  style={{
-                    backgroundColor: 'var(--color-primary)',
-                    color: 'white',
-                    padding: '0.65rem 1.5rem',
-                    borderRadius: 'var(--radius-sm)',
-                    fontWeight: 700,
-                  }}
+                  className={styles.modalPrimaryBtn}
                 >
                   Hoàn Tất Check-out &amp; Dọn Phòng
                 </button>

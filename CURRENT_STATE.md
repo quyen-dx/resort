@@ -39,6 +39,8 @@
 | [src/app/api/reception/payment/route.ts](file:///d:/resort/src/app/api/reception/payment/route.ts) | API thu tiền tại quầy resort và xuất biên lai |
 | [src/app/api/reception/check-out/route.ts](file:///d:/resort/src/app/api/reception/check-out/route.ts) | API check-out và audit check-out sớm |
 | [src/app/reception/page.tsx](file:///d:/resort/src/app/reception/page.tsx) | Dashboard tác nghiệp lễ tân (Front Desk Operations) |
+| [src/app/reception/reception.module.css](file:///d:/resort/src/app/reception/reception.module.css) | Tệp CSS Module chuyên biệt cho Dashboard Lễ tân |
+| `src/client/components/**/*.module.css` | Tách rời 1:1 các file CSS Modules cho từng component TSX |
 | [tests/reception-desk.test.mjs](file:///d:/resort/tests/reception-desk.test.mjs) | Bộ kiểm thử gán phòng, thu tiền quầy và audit trail |
 | [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 7 |
 

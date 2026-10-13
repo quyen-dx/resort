@@ -1,0 +1,102 @@
+.pageWrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-main);
+}
+
+.banner {
+  background: linear-gradient(rgba(15, 42, 36, 0.85), rgba(7, 21, 18, 0.95)),
+    url("https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=80")
+      center/cover;
+  color: white;
+  padding: 4.5rem 1.5rem 6.5rem;
+  text-align: center;
+}
+
+.bannerContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.bannerTag {
+  display: inline-block;
+  color: var(--color-accent);
+  fontSize: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.bannerTitle {
+  font-size: 2.75rem;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+
+.bannerDescription {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.searchBarWrapper {
+  max-width: 1100px;
+  margin: -3.5rem auto 3rem;
+  width: 100%;
+  padding: 0 1.5rem;
+  z-index: 10;
+}
+
+.mainContainer {
+  max-width: 1280px;
+  margin: 0 auto 5rem;
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.75rem;
+}
+
+.catalogueTitle {
+  font-size: 1.5rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.catalogueSubtitle {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.paymentBadge {
+  background-color: white;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.roomList {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.footer {
+  margin-top: auto;
+  padding: 2.5rem 1.5rem;
+  background-color: white;
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}

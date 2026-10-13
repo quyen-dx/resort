@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.variantGold {
+  background-color: rgba(197, 168, 128, 0.15);
+  color: #8f6f46;
+  border: 1px solid rgba(197, 168, 128, 0.35);
+}
+
+.variantEmerald {
+  background-color: rgba(15, 42, 36, 0.08);
+  color: #0f2a24;
+  border: 1px solid rgba(15, 42, 36, 0.2);
+}
+
+.variantGray {
+  background-color: var(--color-bg-subtle);
+  color: var(--color-text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.variantSuccess {
+  background-color: rgba(27, 135, 85, 0.12);
+  color: #13653f;
+  border: 1px solid rgba(27, 135, 85, 0.25);
+}
+
+.variantWarning {
+  background-color: rgba(217, 119, 6, 0.12);
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}

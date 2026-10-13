@@ -1,0 +1,374 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #f4f6f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+}
+
+.headerBrandGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.headerBrandLink {
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 1.25rem;
+  font-family: var(--font-serif);
+}
+
+.headerDivider {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.headerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.headerUserGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.88rem;
+}
+
+.userLabel {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.userName {
+  color: var(--color-accent);
+}
+
+.customerPortalLink {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.4rem 0.85rem;
+  border-radius: var(--radius-sm);
+  color: white;
+}
+
+.toast {
+  position: fixed;
+  top: 4.5rem;
+  right: 2rem;
+  z-index: 100;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: white;
+}
+
+.toastSuccess {
+  background-color: #13653f;
+}
+
+.toastError {
+  background-color: #dc2626;
+}
+
+.mainContainer {
+  max-width: 1350px;
+  margin: 2rem auto;
+  width: 100%;
+  padding: 0 1.5rem;
+  flex: 1;
+}
+
+.tabList {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid var(--border-medium);
+  margin-bottom: 1.5rem;
+}
+
+.tabButton {
+  padding: 0.85rem 1.75rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-muted);
+  margin-bottom: -2px;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.tabButtonActive {
+  border-bottom: 3px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.cardContainer {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.cardTitle {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  margin-bottom: 1.25rem;
+  font-weight: 700;
+}
+
+.emptyText {
+  color: var(--color-text-muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.tableHeaderRow {
+  border-bottom: 2px solid var(--border-subtle);
+  color: var(--color-text-muted);
+}
+
+.th {
+  padding: 0.75rem;
+}
+
+.tableRow {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.td {
+  padding: 0.75rem;
+}
+
+.bookingCode {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.customerName {
+  font-weight: 600;
+}
+
+.customerSub {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.amountPrimary {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.amountSuccess {
+  font-weight: 600;
+  color: var(--color-success);
+}
+
+.amountDebt {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.roomTag {
+  background-color: rgba(15, 42, 36, 0.1);
+  color: var(--color-primary);
+  font-weight: 800;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+}
+
+.roomSelect {
+  padding: 0.45rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+  background-color: white;
+  font-size: 0.85rem;
+}
+
+.actionButtonCheckIn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+}
+
+.actionButtonPay {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+}
+
+.actionButtonCheckOut {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+}
+
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(5px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  padding: 1.75rem;
+}
+
+.modalTitle {
+  font-size: 1.25rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.modalSubtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroupLast {
+  margin-bottom: 1.5rem;
+}
+
+.fieldLabel {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.inputNumber {
+  width: 100%;
+  padding: 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.inputSelect {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+  background-color: white;
+}
+
+.inputText {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-medium);
+}
+
+.modalActions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.modalCancelBtn {
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modalSubmitBtn {
+  background-color: var(--color-accent);
+  color: var(--color-primary-dark);
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+}
+
+.modalPrimaryBtn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.65rem 1.5rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.debtWarning {
+  background-color: #fff5f5;
+  border: 1px solid #fed7d7;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  color: #c53030;
+  font-size: 0.88rem;
+}
+
+.paidSuccessNotice {
+  background-color: #f0fff4;
+  border: 1px solid #c6f6d5;
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.25rem;
+  color: #276749;
+  font-size: 0.88rem;
+}

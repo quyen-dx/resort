@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { calculateNights } from '@/client/utils/date';
+import styles from './search-bar.module.css';
 
 interface SearchBarProps {
   initialCheckIn?: string;
@@ -42,33 +43,10 @@ export function SearchBar({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        backgroundColor: 'white',
-        borderRadius: 'var(--radius-lg)',
-        boxShadow: 'var(--shadow-lg)',
-        padding: '1.25rem',
-        border: '1px solid var(--border-subtle)',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr)) auto',
-        gap: '1rem',
-        alignItems: 'flex-end',
-      }}
-    >
+    <form onSubmit={handleSubmit} className={styles.searchBar}>
       {/* Check-in Date */}
-      <div>
-        <label
-          style={{
-            display: 'block',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-muted)',
-            fontWeight: 700,
-            marginBottom: '0.4rem',
-          }}
-        >
+      <div className={styles.fieldGroup}>
+        <label className={styles.label}>
           Ngày Nhận Phòng
         </label>
         <input
@@ -77,31 +55,13 @@ export function SearchBar({
           min={new Date().toISOString().split('T')[0]}
           onChange={(e) => setCheckIn(e.target.value)}
           required
-          style={{
-            width: '100%',
-            padding: '0.65rem 0.85rem',
-            border: '1px solid var(--border-medium)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.92rem',
-            color: 'var(--color-text-main)',
-            outline: 'none',
-          }}
+          className={styles.input}
         />
       </div>
 
       {/* Check-out Date */}
-      <div>
-        <label
-          style={{
-            display: 'block',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-muted)',
-            fontWeight: 700,
-            marginBottom: '0.4rem',
-          }}
-        >
+      <div className={styles.fieldGroup}>
+        <label className={styles.label}>
           Ngày Trả Phòng ({nights} đêm)
         </label>
         <input
@@ -110,46 +70,19 @@ export function SearchBar({
           min={checkIn}
           onChange={(e) => setCheckOut(e.target.value)}
           required
-          style={{
-            width: '100%',
-            padding: '0.65rem 0.85rem',
-            border: '1px solid var(--border-medium)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.92rem',
-            color: 'var(--color-text-main)',
-            outline: 'none',
-          }}
+          className={styles.input}
         />
       </div>
 
       {/* Guests */}
-      <div>
-        <label
-          style={{
-            display: 'block',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-muted)',
-            fontWeight: 700,
-            marginBottom: '0.4rem',
-          }}
-        >
+      <div className={styles.fieldGroup}>
+        <label className={styles.label}>
           Số Lượng Khách
         </label>
         <select
           value={guests}
           onChange={(e) => setGuests(parseInt(e.target.value, 10))}
-          style={{
-            width: '100%',
-            padding: '0.65rem 0.85rem',
-            border: '1px solid var(--border-medium)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.92rem',
-            color: 'var(--color-text-main)',
-            backgroundColor: 'white',
-            outline: 'none',
-          }}
+          className={styles.select}
         >
           <option value={1}>1 Người lớn</option>
           <option value={2}>2 Người lớn</option>
@@ -159,33 +92,14 @@ export function SearchBar({
       </div>
 
       {/* Rooms */}
-      <div>
-        <label
-          style={{
-            display: 'block',
-            fontSize: '0.75rem',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            color: 'var(--color-text-muted)',
-            fontWeight: 700,
-            marginBottom: '0.4rem',
-          }}
-        >
+      <div className={styles.fieldGroup}>
+        <label className={styles.label}>
           Số Lượng Phòng
         </label>
         <select
           value={rooms}
           onChange={(e) => setRooms(parseInt(e.target.value, 10))}
-          style={{
-            width: '100%',
-            padding: '0.65rem 0.85rem',
-            border: '1px solid var(--border-medium)',
-            borderRadius: 'var(--radius-sm)',
-            fontSize: '0.92rem',
-            color: 'var(--color-text-main)',
-            backgroundColor: 'white',
-            outline: 'none',
-          }}
+          className={styles.select}
         >
           <option value={1}>1 Phòng</option>
           <option value={2}>2 Phòng</option>
@@ -197,17 +111,7 @@ export function SearchBar({
       <div>
         <button
           type="submit"
-          style={{
-            backgroundColor: 'var(--color-accent)',
-            color: 'var(--color-primary-dark)',
-            padding: '0.72rem 1.75rem',
-            borderRadius: 'var(--radius-sm)',
-            fontWeight: 700,
-            fontSize: '0.95rem',
-            boxShadow: '0 2px 10px var(--color-accent-glow)',
-            whiteSpace: 'nowrap',
-            transition: 'transform var(--transition-fast)',
-          }}
+          className={styles.submitButton}
         >
           Tìm Phòng Trống
         </button>

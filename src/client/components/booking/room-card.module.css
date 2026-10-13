@@ -1,0 +1,135 @@
+.card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-subtle);
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) 1fr;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.imageWrapper {
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--transition-smooth);
+}
+
+.imageBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.content {
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  font-size: 1.45rem;
+  font-family: var(--font-serif);
+  color: var(--color-primary);
+  fontWeight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+  font-style: italic;
+}
+
+.description {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.25rem;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.amenityTag {
+  font-size: 0.78rem;
+  color: var(--color-text-main);
+  background-color: var(--color-bg-subtle);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pricePerNight {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.priceUnit {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.priceTotal {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.bookButton {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  border: none;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.bookButton:hover {
+  background-color: var(--color-primary-light);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+  .card {
+    grid-template-columns: 1fr;
+  }
+}

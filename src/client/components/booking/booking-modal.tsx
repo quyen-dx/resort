@@ -5,6 +5,7 @@ import { RoomTypeDTO } from '@/server/services/room.service';
 import { formatVND } from '@/client/utils/currency';
 import { formatDateVN } from '@/client/utils/date';
 import { Badge } from '../ui/badge';
+import styles from './booking-modal.module.css';
 
 interface BookingModalProps {
   room: RoomTypeDTO;
@@ -108,173 +109,66 @@ export function BookingModal({
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(7, 21, 18, 0.75)',
-        backdropFilter: 'blur(8px)',
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1rem',
-      }}
-    >
-      <div
-        style={{
-          backgroundColor: 'white',
-          borderRadius: 'var(--radius-lg)',
-          width: '100%',
-          maxWidth: '680px',
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-          border: '1px solid var(--border-accent)',
-          position: 'relative',
-        }}
-      >
+    <div className={styles.overlay}>
+      <div className={styles.modal}>
         {/* Header */}
-        <div
-          style={{
-            padding: '1.5rem',
-            borderBottom: '1px solid var(--border-subtle)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            backgroundColor: 'var(--color-bg-subtle)',
-          }}
-        >
+        <div className={styles.header}>
           <div>
-            <h2 style={{ fontSize: '1.35rem', color: 'var(--color-primary)', fontFamily: 'var(--font-serif)', fontWeight: 700 }}>
+            <h2 className={styles.headerTitle}>
               {confirmedBookingCode ? 'Xác Nhận Đặt Phòng Thành Công' : 'Hoàn Tất Đặt Phòng'}
             </h2>
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+            <p className={styles.headerSubtitle}>
               {room.name} • {numberOfRooms} phòng • {totalNights} đêm
             </p>
           </div>
-          <button
-            onClick={onClose}
-            style={{
-              fontSize: '1.5rem',
-              color: 'var(--color-text-muted)',
-              lineHeight: 1,
-              padding: '0.25rem',
-            }}
-          >
+          <button onClick={onClose} className={styles.closeButton}>
             ×
           </button>
         </div>
 
         {/* Success View */}
         {confirmedBookingCode ? (
-          <div style={{ padding: '2.5rem 2rem', textAlign: 'center' }}>
-            <div
-              style={{
-                width: '64px',
-                height: '64px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(27, 135, 85, 0.12)',
-                color: 'var(--color-success)',
-                fontSize: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 1.5rem',
-              }}
-            >
+          <div className={styles.successContainer}>
+            <div className={styles.successIcon}>
               ✓
             </div>
 
-            <h3 style={{ fontSize: '1.5rem', color: 'var(--color-primary)', marginBottom: '0.5rem' }}>
+            <h3 className={styles.successTitle}>
               Cảm ơn quý khách, {customerName}!
             </h3>
 
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
+            <p className={styles.successMessage}>
               Đơn đặt phòng của quý khách đã được hệ thống xác nhận thành công và lưu giữ chỗ an toàn.
             </p>
 
-            <div
-              style={{
-                backgroundColor: 'var(--color-bg-subtle)',
-                padding: '1.25rem',
-                borderRadius: 'var(--radius-md)',
-                display: 'inline-block',
-                border: '1px dashed var(--color-accent-dark)',
-                marginBottom: '2rem',
-              }}
-            >
-              <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
+            <div className={styles.codeBox}>
+              <div className={styles.codeBoxLabel}>
                 MÃ ĐẶT PHÒNG RESORT
               </div>
-              <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '0.05em' }}>
+              <div className={styles.codeBoxValue}>
                 {confirmedBookingCode}
               </div>
             </div>
 
-            <div
-              style={{
-                textAlign: 'left',
-                backgroundColor: '#fffdfa',
-                border: '1px solid #fae8c8',
-                padding: '1rem',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '0.88rem',
-                color: '#8f6f46',
-                marginBottom: '2rem',
-              }}
-            >
+            <div className={styles.policyNotice}>
               ℹ️ <strong>Chính sách thanh toán tại quầy (BIZ-01):</strong> Quý khách không cần trả tiền trực tuyến. Toàn bộ số tiền <strong>{formatVND(grandTotal)}</strong> sẽ được thanh toán trực tiếp tại quầy lễ tân resort khi quý khách làm thủ tục Check-in.
             </div>
 
-            <button
-              onClick={onClose}
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                color: 'white',
-                padding: '0.75rem 2.5rem',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 600,
-                fontSize: '1rem',
-              }}
-            >
+            <button onClick={onClose} className={styles.closeDialogBtn}>
               Đóng Cửa Sổ
             </button>
           </div>
         ) : (
           /* Booking Form */
-          <form onSubmit={handleBookingSubmit} style={{ padding: '1.5rem' }}>
+          <form onSubmit={handleBookingSubmit} className={styles.form}>
             {errorMessage && (
-              <div
-                style={{
-                  backgroundColor: 'rgba(220, 38, 38, 0.1)',
-                  color: 'var(--color-danger)',
-                  padding: '0.75rem 1rem',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.88rem',
-                  marginBottom: '1.25rem',
-                  border: '1px solid rgba(220, 38, 38, 0.25)',
-                }}
-              >
+              <div className={styles.errorBanner}>
                 ⚠️ {errorMessage}
               </div>
             )}
 
             {/* Stay Summary Bar */}
-            <div
-              style={{
-                backgroundColor: 'var(--color-bg-subtle)',
-                padding: '1rem',
-                borderRadius: 'var(--radius-md)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                fontSize: '0.88rem',
-                marginBottom: '1.5rem',
-              }}
-            >
+            <div className={styles.staySummaryBar}>
               <div>
                 <span style={{ color: 'var(--color-text-muted)' }}>Thời gian: </span>
                 <strong>{formatDateVN(checkInDate)}</strong> → <strong>{formatDateVN(checkOutDate)}</strong>
@@ -285,14 +179,14 @@ export function BookingModal({
             </div>
 
             {/* Guest Information */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '1rem', color: 'var(--color-primary)', marginBottom: '0.75rem', fontWeight: 700 }}>
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>
                 1. Thông Tin Người Đại Diện
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.75rem' }}>
+              <div className={styles.formGridTwoCol}>
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+                  <label className={styles.fieldLabel}>
                     Họ và Tên *
                   </label>
                   <input
@@ -301,18 +195,12 @@ export function BookingModal({
                     placeholder="Nguyễn Văn A"
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.6rem 0.8rem',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: 'var(--radius-sm)',
-                      fontSize: '0.9rem',
-                    }}
+                    className={styles.inputField}
                   />
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+                  <label className={styles.fieldLabel}>
                     Số Điện Thoại *
                   </label>
                   <input
@@ -321,19 +209,13 @@ export function BookingModal({
                     placeholder="0912 345 678"
                     value={customerPhone}
                     onChange={(e) => setCustomerPhone(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.6rem 0.8rem',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: 'var(--radius-sm)',
-                      fontSize: '0.9rem',
-                    }}
+                    className={styles.inputField}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+                <label className={styles.fieldLabel}>
                   Địa Chỉ Email Nhận Xác Nhận *
                 </label>
                 <input
@@ -342,22 +224,16 @@ export function BookingModal({
                   placeholder="email@example.com"
                   value={customerEmail}
                   onChange={(e) => setCustomerEmail(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem 0.8rem',
-                    border: '1px solid var(--border-medium)',
-                    borderRadius: 'var(--radius-sm)',
-                    fontSize: '0.9rem',
-                  }}
+                  className={styles.inputField}
                 />
               </div>
             </div>
 
             {/* Airport Transfer Option (INT-01) */}
-            <div style={{ marginBottom: '1.5rem', borderTop: '1px solid var(--border-subtle)', paddingTop: '1.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div className={styles.sectionDivider}>
+              <div className={styles.transportRow}>
                 <div>
-                  <h3 style={{ fontSize: '1rem', color: 'var(--color-primary)', fontWeight: 700 }}>
+                  <h3 className={styles.sectionTitle}>
                     2. Dịch Vụ Xe Đưa Đón Sân Bay
                   </h3>
                   <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
@@ -376,8 +252,8 @@ export function BookingModal({
               </div>
 
               {includeTransport && (
-                <div style={{ marginTop: '0.75rem', backgroundColor: 'var(--color-bg-subtle)', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
-                  <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+                <div className={styles.transportBox}>
+                  <label className={styles.fieldLabel}>
                     Số hiệu chuyến bay hạ cánh (nếu có)
                   </label>
                   <input
@@ -385,21 +261,15 @@ export function BookingModal({
                     placeholder="Ví dụ: VN123 / VJ456"
                     value={flightNumber}
                     onChange={(e) => setFlightNumber(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem 0.75rem',
-                      border: '1px solid var(--border-medium)',
-                      borderRadius: 'var(--radius-sm)',
-                      fontSize: '0.88rem',
-                    }}
+                    className={styles.inputField}
                   />
                 </div>
               )}
             </div>
 
             {/* Special Requests */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.3rem' }}>
+            <div className={styles.section}>
+              <label className={styles.fieldLabel}>
                 Yêu cầu đặc biệt (tùy chọn)
               </label>
               <textarea
@@ -407,54 +277,30 @@ export function BookingModal({
                 placeholder="Ví dụ: Giường đôi, nhận phòng muộn, trang trí kỷ niệm ngày cưới..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.8rem',
-                  border: '1px solid var(--border-medium)',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '0.88rem',
-                }}
+                className={styles.inputField}
               />
             </div>
 
             {/* Bill Summary & Payment at Counter Notice */}
-            <div
-              style={{
-                backgroundColor: 'var(--color-bg-subtle)',
-                padding: '1.25rem',
-                borderRadius: 'var(--radius-md)',
-                marginBottom: '1.5rem',
-              }}
-            >
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', marginBottom: '0.4rem' }}>
+            <div className={styles.billSummaryBox}>
+              <div className={styles.billRow}>
                 <span style={{ color: 'var(--color-text-muted)' }}>Tiền phòng ({totalNights} đêm x {numberOfRooms} phòng):</span>
                 <span>{formatVND(roomTotal)}</span>
               </div>
 
               {includeTransport && (
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.88rem', marginBottom: '0.4rem' }}>
+                <div className={styles.billRow}>
                   <span style={{ color: 'var(--color-text-muted)' }}>Xe đưa đón sân bay (35km):</span>
                   <span>{formatVND(transportCost)}</span>
                 </div>
               )}
 
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  fontSize: '1.15rem',
-                  fontWeight: 800,
-                  color: 'var(--color-primary)',
-                  borderTop: '1px solid var(--border-medium)',
-                  paddingTop: '0.6rem',
-                  marginTop: '0.4rem',
-                }}
-              >
+              <div className={styles.billTotalRow}>
                 <span>Tổng Chi Phí Phải Trả:</span>
                 <span>{formatVND(grandTotal)}</span>
               </div>
 
-              <p style={{ fontSize: '0.78rem', color: 'var(--color-accent-dark)', marginTop: '0.6rem', fontStyle: 'italic' }}>
+              <p className={styles.billNote}>
                 * Thanh toán 100% tại quầy lễ tân resort khi quý khách làm thủ tục Check-in (tiền mặt hoặc thẻ).
               </p>
             </div>
@@ -463,18 +309,7 @@ export function BookingModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              style={{
-                width: '100%',
-                backgroundColor: 'var(--color-accent)',
-                color: 'var(--color-primary-dark)',
-                padding: '0.85rem',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 800,
-                fontSize: '1.05rem',
-                boxShadow: '0 4px 15px var(--color-accent-glow)',
-                opacity: isSubmitting ? 0.7 : 1,
-                cursor: isSubmitting ? 'not-allowed' : 'pointer',
-              }}
+              className={styles.submitBtn}
             >
               {isSubmitting ? 'Đang Xử Lý Giao Dịch...' : 'Xác Nhận Giữ Chỗ (Thanh Toán Tại Resort)'}
             </button>
