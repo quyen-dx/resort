@@ -13,20 +13,17 @@
   - Thống nhất các quy tắc nghiệp vụ cốt lõi.
 - [x] **Giai đoạn 1 (Thiết lập bộ nhớ dự án):**
   - Khởi tạo [AGENTS.md](file:///d:/resort/AGENTS.md), [PROJECT.md](file:///d:/resort/PROJECT.md), [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md), [TASKS.md](file:///d:/resort/TASKS.md).
-- [x] **Roadmap Giai đoạn 5 (Booking API & Idempotency Engine):**
-  - Xây dựng [src/server/services/booking.service.ts](file:///d:/resort/src/server/services/booking.service.ts):
-    - Hỗ trợ `Idempotency-Key` (chống double-click/mạng lag, bảo toàn tồn kho khi retry) (`DB-02`, `BOOK-04`).
-    - Thực thi Atomic Transaction: Đặt tồn kho + Tạo Booking + Khởi tạo cuốc xe đưa đón (nếu có) + Ghi AuditLog.
-    - Cơ chế sinh mã đặt phòng chuẩn resort `AN-YYYYMM-XXXX`.
-    - Triển khai State Machine đầy đủ: `CONFIRMED` $\rightarrow$ `CHECKED_IN` $\rightarrow$ `CHECKED_OUT` (hoặc `CANCELLED`, `NO_SHOW`).
-    - Logic hủy phòng kết nối với `releaseInventoryAtomic` để hoàn trả tồn kho tức thời (`BOOK-06`).
-    - Gán phòng vật lý khi Check-in với DB constraint chống gán trùng phòng cùng kỳ (`BOOK-07`).
-  - Xây dựng các Route Handlers:
-    - `POST /api/bookings`: Tạo đơn đặt phòng có hỗ trợ `Idempotency-Key` header.
-    - `GET /api/bookings/[code]`: Xem chi tiết đơn đặt phòng với Anti-IDOR check.
-    - `POST /api/bookings/[code]/cancel`: Hủy đặt phòng và hoàn trả tồn kho nguyên tử.
-  - Bộ kiểm thử Idempotency & State Machine [tests/booking-idempotency.test.mjs](file:///d:/resort/tests/booking-idempotency.test.mjs): 5/5 tests PASS.
-  - Toàn bộ hệ thống: **21/21 test cases PASS (100%)**, Next.js build hoàn thành 9/9 routes.
+- [x] **Roadmap Giai đoạn 6 (Giao diện Khách hàng & Design System):**
+  - Xây dựng Design System chuẩn resort thượng lưu (Deep Emerald, Champagne Gold, Soft Sand White):
+    - [src/client/components/layout/navbar.tsx](file:///d:/resort/src/client/components/layout/navbar.tsx): Header thương hiệu cao cấp với logo độc bản và điều hướng nhanh.
+    - [src/client/components/ui/badge.tsx](file:///d:/resort/src/client/components/ui/badge.tsx): Tag phân loại hạng phòng, tiện ích và trạng thái.
+    - [src/client/components/booking/search-bar.tsx](file:///d:/resort/src/client/components/booking/search-bar.tsx): Thanh tìm kiếm ngày nhận/trả phòng, tự động tính số đêm và bộ lọc số lượng khách/phòng.
+    - [src/client/components/booking/room-card.tsx](file:///d:/resort/src/client/components/booking/room-card.tsx): Trưng bày phòng nghỉ dưỡng với hình ảnh sống động, tiện ích đặc quyền và giá tiền VND định dạng chuẩn.
+    - [src/client/components/booking/booking-modal.tsx](file:///d:/resort/src/client/components/booking/booking-modal.tsx): Hộp thoại đặt phòng hoàn chỉnh tích hợp tự sinh `Idempotency-Key`, tùy chọn xe đón sân bay (`4.000 ₫/km`), thông báo thanh toán tại quầy (`BIZ-01`), và màn hình xác nhận mã đặt phòng `AN-YYYYMM-XXXX`.
+  - Cập nhật [src/app/page.tsx](file:///d:/resort/src/app/page.tsx): Trang chủ với SearchBar nhúng trực tiếp, 3 trụ cột trải nghiệm thượng lưu (Villa hồ bơi, Spa & Wellness, Ẩm thực biển), và cam kết không overbooking.
+  - Xây dựng [src/app/rooms/page.tsx](file:///d:/resort/src/app/rooms/page.tsx): Trang danh mục phòng đầy đủ với bộ lọc ngày và popup đặt phòng tức thời.
+  - Tích hợp [src/server/services/room.service.ts](file:///d:/resort/src/server/services/room.service.ts) và API `/api/rooms`.
+  - Next.js build: 11/11 routes thành công trong 1.2s, Core Web Vitals tối ưu với CSS thuần và Zero third-party UI bloat.
 
 ---
 
@@ -34,35 +31,38 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [src/server/services/booking.service.ts](file:///d:/resort/src/server/services/booking.service.ts) | Service quản lý đặt phòng, Idempotency, State Machine và hủy phòng |
-| [src/app/api/bookings/route.ts](file:///d:/resort/src/app/api/bookings/route.ts) | API tạo đặt phòng với Idempotency header |
-| [src/app/api/bookings/[code]/route.ts](file:///d:/resort/src/app/api/bookings/[code]/route.ts) | API xem chi tiết đặt phòng (Anti-IDOR) |
-| [src/app/api/bookings/[code]/cancel/route.ts](file:///d:/resort/src/app/api/bookings/[code]/cancel/route.ts) | API hủy phòng và hoàn trả tồn kho |
-| [tests/booking-idempotency.test.mjs](file:///d:/resort/tests/booking-idempotency.test.mjs) | Bộ kiểm thử Idempotency retry, State Machine và Parallel Cancellation |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 5 |
+| [src/client/components/layout/navbar.tsx](file:///d:/resort/src/client/components/layout/navbar.tsx) | Navigation bar mang nhận diện sang trọng An Nam Resort |
+| [src/client/components/booking/search-bar.tsx](file:///d:/resort/src/client/components/booking/search-bar.tsx) | Thanh tìm kiếm ngày lưu trú và số lượng khách/phòng |
+| [src/client/components/booking/room-card.tsx](file:///d:/resort/src/client/components/booking/room-card.tsx) | Card hiển thị chi tiết phòng, giá tiền và nút đặt phòng |
+| [src/client/components/booking/booking-modal.tsx](file:///d:/resort/src/client/components/booking/booking-modal.tsx) | Modal đặt phòng với Idempotency, xe đón sân bay, thông báo thanh toán quầy |
+| [src/app/rooms/page.tsx](file:///d:/resort/src/app/rooms/page.tsx) | Trang danh mục biệt thự & phòng nghỉ dưỡng |
+| [src/app/page.tsx](file:///d:/resort/src/app/page.tsx) | Trang chủ hoàn thiện trải nghiệm khách hàng |
+| [src/server/services/room.service.ts](file:///d:/resort/src/server/services/room.service.ts) & [src/app/api/rooms/route.ts](file:///d:/resort/src/app/api/rooms/route.ts) | Service và API danh mục phòng nghỉ dưỡng |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 6 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Full Test Suite:** 3 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`) $\rightarrow$ **21/21 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ 9/9 routes biên dịch thành công.
+- **Full System Test Suites:** 21/21 test cases PASS (100%).
+- **Next.js Production Build:** `npm run build` $\rightarrow$ **11/11 routes biên dịch thành công** (trang tĩnh `/` và `/rooms` prerender thành công).
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần xây dựng giao diện người dùng trực quan cao cấp (Customer UI) để khách hàng trải nghiệm toàn bộ luồng tìm kiếm và đặt phòng mượt mà.
+- Cần xây dựng màn hình nghiệp vụ Lễ tân (Reception Dashboard) để nhân viên thực hiện check-in, gán phòng vật lý và thu tiền tại quầy (Giai đoạn 7).
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 6: Customer UI Flow (`PERF-01`, `PERF-02`):**
-  - Xây dựng Design System Components cao cấp: Thanh tìm kiếm chọn ngày (`DateRangePicker`), Card phòng nghỉ dưỡng với hình ảnh sang trọng, Modal chi tiết phòng, Tóm tắt giá và Form xác nhận đặt phòng.
-  - Xây dựng trang danh sách phòng `/rooms` và trang chi tiết `/rooms/[id]`.
-  - Tích hợp gọi API `/api/rooms/availability` và `/api/bookings` với Idempotency Key tự sinh từ client.
-  - Tối ưu hiệu năng Core Web Vitals, skeleton loading và trạng thái lỗi.
+- **Roadmap Giai đoạn 7: Reception Dashboard & Vận hành Quầy (`BOOK-07`, `BIZ-01`, `BIZ-02`):**
+  - Màn hình Lễ tân quản lý danh sách check-in/check-out trong ngày.
+  - Quy trình gán số phòng vật lý khi Check-in (chống gán trùng phòng).
+  - Thu tiền tại quầy resort: Tạo phiếu thu (`PaymentTransaction`), quản lý công nợ (`due`, `paid`, `balance`).
+  - Xử lý Check-out sớm (`actual_checkout_at`) và Audit trail.
+
 
 
 

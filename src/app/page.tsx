@@ -1,222 +1,219 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { Navbar } from '@/client/components/layout/navbar';
+import { SearchBar } from '@/client/components/booking/search-bar';
 
 export default function HomePage() {
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* Navigation Header */}
-      <header
-        style={{
-          borderBottom: '1px solid var(--border-subtle)',
-          backgroundColor: 'rgba(255, 255, 255, 0.9)',
-          backdropFilter: 'blur(10px)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: '1280px',
-            margin: '0 auto',
-            padding: '1.25rem 1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
-                background: 'linear-gradient(135deg, var(--color-primary), var(--color-accent))',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'white',
-                fontWeight: 'bold',
-                fontSize: '1.2rem',
-              }}
-            >
-              A
-            </div>
-            <div>
-              <h1 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '0.02em', color: 'var(--color-primary)' }}>
-                AN NAM RESORT
-              </h1>
-              <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', letterSpacing: '0.1em' }}>
-                HOSPITALITY & OPERATIONS
-              </p>
-            </div>
-          </div>
+  const router = useRouter();
 
-          <nav style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', fontSize: '0.9rem' }}>
-            <Link href="/rooms" style={{ color: 'var(--color-text-main)', fontWeight: 500 }}>
-              Khám Phá Phòng
-            </Link>
-            <Link href="/transport" style={{ color: 'var(--color-text-main)', fontWeight: 500 }}>
-              Đưa Đón Sân Bay
-            </Link>
-            <Link
-              href="/portal/login"
-              style={{
-                backgroundColor: 'var(--color-primary)',
-                color: 'var(--color-text-inverse)',
-                padding: '0.6rem 1.2rem',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 600,
-                transition: 'background var(--transition-fast)',
-              }}
-            >
-              Cổng Nhân Viên
-            </Link>
-          </nav>
-        </div>
-      </header>
+  const handleSearch = (criteria: { checkIn: string; checkOut: string; guests: number; rooms: number }) => {
+    router.push(`/rooms?checkIn=${criteria.checkIn}&checkOut=${criteria.checkOut}&guests=${criteria.guests}&rooms=${criteria.rooms}`);
+  };
+
+  return (
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--color-bg-main)' }}>
+      <Navbar />
 
       {/* Hero Section */}
       <section
         style={{
-          background: 'radial-gradient(ellipse at top, #1a4239 0%, #0d211c 100%)',
-          color: 'white',
-          padding: '6rem 1.5rem',
-          textAlign: 'center',
           position: 'relative',
+          background: 'linear-gradient(rgba(15, 42, 36, 0.75), rgba(7, 21, 18, 0.9)), url("https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1920&q=85") center/cover',
+          color: 'white',
+          padding: '6.5rem 1.5rem 8rem',
+          textAlign: 'center',
         }}
       >
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
           <span
             style={{
               display: 'inline-block',
               backgroundColor: 'rgba(197, 168, 128, 0.2)',
               color: 'var(--color-accent)',
-              padding: '0.35rem 1rem',
+              padding: '0.4rem 1.25rem',
               borderRadius: 'var(--radius-full)',
               fontSize: '0.85rem',
-              fontWeight: 600,
-              letterSpacing: '0.05em',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
               marginBottom: '1.5rem',
-              border: '1px solid rgba(197, 168, 128, 0.3)',
+              border: '1px solid rgba(197, 168, 128, 0.35)',
             }}
           >
-            RESORT MANAGEMENT &amp; OPERATIONS PLATFORM
+            KHÔNG GIAN NGHỈ DƯỠNG BIỂN ĐẲNG CẤP 5 SAO
           </span>
 
-          <h2
+          <h1
             style={{
-              fontSize: '3rem',
-              fontWeight: 800,
-              lineHeight: 1.2,
+              fontSize: '3.5rem',
+              fontFamily: 'var(--font-serif)',
+              fontWeight: 700,
+              lineHeight: 1.15,
               marginBottom: '1.5rem',
               letterSpacing: '-0.02em',
             }}
           >
-            Nghỉ Dưỡng Thượng Lưu Ven Biển
-          </h2>
+            Chạm Đến Đỉnh Cao Nghỉ Dưỡng Thượng Lưu
+          </h1>
 
           <p
             style={{
-              fontSize: '1.15rem',
-              color: 'rgba(255, 255, 255, 0.8)',
-              maxWidth: '650px',
+              fontSize: '1.18rem',
+              color: 'rgba(255, 255, 255, 0.88)',
+              maxWidth: '680px',
               margin: '0 auto 2.5rem',
               lineHeight: 1.7,
             }}
           >
-            Trải nghiệm dịch vụ lưu trú 5 sao với hệ sinh thái vận hành thông minh: kiểm soát tồn kho tức thời, thanh toán an toàn tại quầy và xe đưa đón chuẩn mực.
+            Tận hưởng kỳ nghỉ biệt lập giữa vịnh biển thanh bình. Đặt phòng trực tuyến thông minh, giữ chỗ tức thì và thanh toán 100% tại quầy resort.
           </p>
-
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <Link
-              href="/rooms"
-              style={{
-                backgroundColor: 'var(--color-accent)',
-                color: 'var(--color-primary-dark)',
-                padding: '0.85rem 2rem',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 700,
-                fontSize: '1rem',
-                boxShadow: '0 4px 20px var(--color-accent-glow)',
-              }}
-            >
-              Đặt Phòng Ngay
-            </Link>
-            <Link
-              href="/reception"
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                color: 'white',
-                padding: '0.85rem 1.75rem',
-                borderRadius: 'var(--radius-sm)',
-                fontWeight: 600,
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-              }}
-            >
-              Khu Vực Lễ Tân
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Feature Pillars */}
-      <section style={{ maxWidth: '1280px', margin: '-3rem auto 4rem', padding: '0 1.5rem', zIndex: 10 }}>
+      {/* Embedded Search Bar */}
+      <div style={{ maxWidth: '1100px', margin: '-3.75rem auto 4.5rem', width: '100%', padding: '0 1.5rem', zIndex: 10 }}>
+        <SearchBar onSearch={handleSearch} />
+      </div>
+
+      {/* Luxury Experiences */}
+      <section style={{ maxWidth: '1280px', margin: '0 auto 5rem', padding: '0 1.5rem', width: '100%' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <span style={{ color: 'var(--color-accent-dark)', fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            HỆ SINH THÁI ĐẶC QUYỀN
+          </span>
+          <h2 style={{ fontSize: '2.25rem', fontFamily: 'var(--font-serif)', color: 'var(--color-primary)', marginTop: '0.3rem' }}>
+            Trải Nghiệm Đáng Nhớ Tại An Nam
+          </h2>
+        </div>
+
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '1.5rem',
+            gap: '1.75rem',
           }}
         >
+          {/* Card 1 */}
           <div
             style={{
               backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
               boxShadow: 'var(--shadow-md)',
               border: '1px solid var(--border-subtle)',
             }}
           >
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
-              🏨 Chống Overbooking Tuyệt Đối
-            </h3>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
-              Kiểm tra tồn kho theo từng đêm lưu trú với cơ chế Atomic Transaction tại tầng cơ sở dữ liệu. Cam kết bảo đảm phòng theo quy tắc &quot;First commit wins&quot;.
-            </p>
+            <img
+              src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80"
+              alt="Beachfront Pool Villa"
+              style={{ width: '100%', height: '220px', objectFit: 'cover' }}
+            />
+            <div style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', fontFamily: 'var(--font-serif)', marginBottom: '0.5rem' }}>
+                Biệt Thự Hồ Bơi Riêng
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                Biệt lập hoàn toàn với lối đi thẳng ra bờ cát trắng, bồn tắm đá lộ thiên và quản gia phục vụ 24/7.
+              </p>
+              <Link href="/rooms" style={{ color: 'var(--color-accent-dark)', fontWeight: 700, fontSize: '0.9rem' }}>
+                Khám phá biệt thự →
+              </Link>
+            </div>
           </div>
 
+          {/* Card 2 */}
           <div
             style={{
               backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
               boxShadow: 'var(--shadow-md)',
               border: '1px solid var(--border-subtle)',
             }}
           >
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
-              💵 Thanh Toán An Toàn Tại Quầy
-            </h3>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
-              Quản lý chi tiết công nợ (phải trả, đã trả, còn lại) và kiểm toán đầy đủ mọi giao dịch tại quầy lễ tân resort, không lưu vết thanh toán ảo.
-            </p>
+            <img
+              src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=600&q=80"
+              alt="Spa & Wellness"
+              style={{ width: '100%', height: '220px', objectFit: 'cover' }}
+            />
+            <div style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', fontFamily: 'var(--font-serif)', marginBottom: '0.5rem' }}>
+                An Nam Lotus Spa
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                Liệu pháp cổ truyền kết hợp thảo dược bản địa giúp tái tạo năng lượng thể chất và thư thái tinh thần.
+              </p>
+              <span style={{ color: 'var(--color-accent-dark)', fontWeight: 700, fontSize: '0.9rem' }}>
+                Đặc quyền khách lưu trú →
+              </span>
+            </div>
           </div>
 
+          {/* Card 3 */}
           <div
             style={{
               backgroundColor: 'white',
-              padding: '2rem',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
               boxShadow: 'var(--shadow-md)',
               border: '1px solid var(--border-subtle)',
             }}
           >
-            <h3 style={{ fontSize: '1.2rem', color: 'var(--color-primary)', marginBottom: '0.75rem' }}>
-              🚗 Xe Đưa Đón Sân Bay Sandbox
-            </h3>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
-              Tích hợp Adapter với hệ thống giả lập đưa đón mẫu, hỗ trợ tài xế và điều phối viên vận hành trơn tru trước khi kích hoạt API đối tác.
-            </p>
+            <img
+              src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80"
+              alt="Fine Dining"
+              style={{ width: '100%', height: '220px', objectFit: 'cover' }}
+            />
+            <div style={{ padding: '1.5rem' }}>
+              <h3 style={{ fontSize: '1.25rem', color: 'var(--color-primary)', fontFamily: 'var(--font-serif)', marginBottom: '0.5rem' }}>
+                Ẩm Thực Biển Thượng Hạng
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                Hải sản tươi sống đánh bắt trong ngày được chế biến tinh tế bởi các bếp trưởng tiêu chuẩn quốc tế.
+              </p>
+              <span style={{ color: 'var(--color-accent-dark)', fontWeight: 700, fontSize: '0.9rem' }}>
+                Bữa sáng tiêu chuẩn 5 sao →
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Operational Highlights (Chống overbooking & Thanh toán) */}
+      <section style={{ backgroundColor: 'var(--color-bg-subtle)', padding: '4.5rem 1.5rem', borderTop: '1px solid var(--border-subtle)', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🛡️</div>
+              <h4 style={{ fontSize: '1.15rem', color: 'var(--color-primary)', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Khóa Phòng Tức Thời
+              </h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                Hệ thống cam kết tồn kho theo từng đêm nghỉ với thuật toán giao dịch nguyên tử, loại trừ 100% rủi ro trùng phòng.
+              </p>
+            </div>
+
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>💳</div>
+              <h4 style={{ fontSize: '1.15rem', color: 'var(--color-primary)', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Thanh Toán Minh Bạch Tại Resort
+              </h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                Không cần thanh toán online, chỉ thanh toán khi nhận phòng tại quầy lễ tân với đầy đủ hóa đơn chứng từ.
+              </p>
+            </div>
+
+            <div style={{ padding: '1rem' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🚗</div>
+              <h4 style={{ fontSize: '1.15rem', color: 'var(--color-primary)', fontWeight: 700, marginBottom: '0.5rem' }}>
+                Đưa Đón Sân Bay Tiện Lợi
+              </h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+                Tùy chọn xe đón tận cổng với bảng giá công khai mẫu 4.000 ₫/km, tài xế chuyên nghiệp đón đúng giờ hạ cánh.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -225,15 +222,14 @@ export default function HomePage() {
       <footer
         style={{
           marginTop: 'auto',
-          borderTop: '1px solid var(--border-subtle)',
-          padding: '2rem 1.5rem',
+          padding: '2.5rem 1.5rem',
           backgroundColor: 'white',
           textAlign: 'center',
-          fontSize: '0.85rem',
+          fontSize: '0.88rem',
           color: 'var(--color-text-muted)',
         }}
       >
-        <p>© 2026 An Nam Resort Management Ecosystem. Architecture built with Next.js &amp; Clean Architecture.</p>
+        <p>© 2026 An Nam Resort Management &amp; Operations. Hệ thống quản lý nghỉ dưỡng đẳng cấp quốc tế.</p>
       </footer>
     </div>
   );

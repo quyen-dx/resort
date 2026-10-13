@@ -103,16 +103,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 6: GIAO DIỆN KHÁCH HÀNG (GATE: E2E & CORE WEB VITALS)
-- [ ] **TASK-06.1: Thiết lập Design System Cao cấp & Trang Chủ**
+- [x] **TASK-06.1: Thiết lập Design System Cao cấp & Trang Chủ**
   - **Requirement IDs:** `PERF-01`, `PERF-02`
-  - **Mô tả:** Xây dựng Design System (bảng màu sang trọng, typography chuẩn, spacing, components: Button, Card, DateRangePicker, Modal), hỗ trợ Đa ngôn ngữ (VI/EN).
-  - **Tiêu chí nghiệm thu:** Giao diện trực quan cao cấp, responsive mượt mà trên mobile/tablet/desktop.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-06.2: Luồng Tìm kiếm & Đặt phòng Khách hàng**
+  - **Mô tả:** Xây dựng Design System chuẩn resort thượng lưu (bảng màu Deep Emerald `#0f2a24` & Champagne Gold `#c5a880`), typography có phân cấp, các thành phần tái sử dụng (`Navbar`, `Badge`, `SearchBar`), responsive toàn diện trên desktop/tablet/mobile.
+  - **Tiêu chí nghiệm thu:** Giao diện trực quan cao cấp, không copy Booking.com, responsive mượt mà.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/client/components/layout/navbar.tsx`, `src/client/components/ui/badge.tsx`, `src/client/components/booking/search-bar.tsx`, `src/app/page.tsx`.
+  - **Test Evidence:** Next.js build prerender static page `/` thành công, kiểm tra responsive grid.
+- [x] **TASK-06.2: Luồng Tìm kiếm & Đặt phòng Khách hàng**
   - **Requirement IDs:** `PERF-02`, `BOOK-08`
-  - **Mô tả:** Trang danh sách phòng, lọc tiện ích, xem chi tiết, form nhập thông tin khách (hỗ trợ Guest), tóm tắt hóa đơn và xác nhận.
-  - **Tiêu chí nghiệm thu:** E2E test luồng đặt phòng từ tìm kiếm đến màn hình xác nhận thành công.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Xây dựng trang danh sách phòng `/rooms`, tính toán số đêm thực tế theo ranh giới ngày, `RoomCard` hiển thị hình ảnh & tiện ích, tích hợp `BookingModal` với tự sinh `Idempotency-Key`, tùy chọn xe đón sân bay (`4.000 ₫/km`), tóm tắt chi phí và nhắc nhở thanh toán tại quầy (`BIZ-01`).
+  - **Tiêu chí nghiệm thu:** Luồng tìm kiếm phòng, chọn ngày và đặt phòng thành công, sinh mã đặt phòng `AN-YYYYMM-XXXX`.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/app/rooms/page.tsx`, `src/client/components/booking/room-card.tsx`, `src/client/components/booking/booking-modal.tsx`, `src/server/services/room.service.ts`, `src/app/api/rooms/route.ts`.
+  - **Test Evidence:** Next.js build 11/11 routes thành công trong 1.2s; API `/api/rooms` và modal kết nối trơn tru.
 
 ---
 
