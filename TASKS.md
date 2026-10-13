@@ -157,16 +157,20 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
 ---
 
 ## GIAI ĐOẠN 9: QUAN SÁT & KHÔI PHỤC (GATE: DASHBOARD + RESTORE DRILL)
-- [ ] **TASK-09.1: Structured Logging & Health Check Metrics**
+- [x] **TASK-09.1: Structured Logging & Health Check Metrics**
   - **Requirement IDs:** `OBS-01`, `OBS-02`
-  - **Mô tả:** Gán `request_id`, ghi log có cấu trúc dạng JSON, endpoint `/api/health`, giám sát connection pool và latency.
-  - **Tiêu chí nghiệm thu:** Truy vết được toàn bộ vòng đời của một booking qua `request_id`.
-  - **Trạng thái:** Chưa bắt đầu.
-- [ ] **TASK-09.2: Chiến lược Sao lưu & Phục hồi Dữ liệu**
+  - **Mô tả:** Gán `x-request-id`, ghi log có cấu trúc dạng JSON, endpoint `/api/health`, giám sát connection probe latency, RAM heap footprint và xây dựng System Health Dashboard với CSS Module riêng.
+  - **Tiêu chí nghiệm thu:** Truy vết được toàn bộ vòng đời của một booking qua `request_id`, cảnh báo suy giảm hiệu năng khi độ trễ database $> 500$ms.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/server/lib/logger.ts`, `src/app/api/health/route.ts`, `src/app/admin/system-health/page.tsx`, `src/app/admin/system-health/system-health.module.css`, `tests/observability-health.test.mjs`.
+  - **Test Evidence:** Test suite `tests/observability-health.test.mjs`: Định dạng JSON đầy đủ các trường chuẩn hóa ISO timestamp, tự sinh Request ID, tự động phân loại `HEALTHY`/`DEGRADED`/`UNHEALTHY`.
+- [x] **TASK-09.2: Chiến lược Sao lưu & Phục hồi Dữ liệu**
   - **Requirement IDs:** `REL-01`, `REL-02`
-  - **Mô tả:** Kịch bản backup định kỳ, tài liệu hướng dẫn khôi phục thảm họa (Disaster Recovery Runbook).
-  - **Tiêu chí nghiệm thu:** Diễn tập phục hồi database từ file dump thành công.
-  - **Trạng thái:** Chưa bắt đầu.
+  - **Mô tả:** Viết script backup định kỳ (PowerShell + Shell) nén gzip, tính toán mã băm SHA-256 Checksum, script khôi phục an toàn và tài liệu Sổ tay Diễn tập Phục hồi Thảm họa (Disaster Recovery Runbook) cam kết $RTO \le 30$ phút, $RPO \le 1$ giờ.
+  - **Tiêu chí nghiệm thu:** Diễn tập phục hồi database từ file dump thành công và xác thực tính toàn vẹn Checksum.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `scripts/backup-db.ps1`, `scripts/backup-db.sh`, `scripts/restore-db.ps1`, `scripts/restore-db.sh`, `docs/disaster_recovery_runbook.md`, `tests/observability-health.test.mjs`.
+  - **Test Evidence:** Test suite `tests/observability-health.test.mjs`: Xác minh tính toàn vẹn Checksum SHA-256 và phát hiện file bị sửa đổi / hỏng dữ liệu.
 
 ---
 

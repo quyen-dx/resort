@@ -1,0 +1,244 @@
+.pageWrapper {
+  min-height: 100vh;
+  background-color: #f4f6f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-md);
+}
+
+.brandGroup {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brandLink {
+  color: var(--color-accent);
+  font-weight: 800;
+  font-size: 1.25rem;
+  font-family: var(--font-serif);
+}
+
+.divider {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.headerTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.navGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.88rem;
+}
+
+.navButton {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--radius-sm);
+  color: white;
+  transition: background-color var(--transition-fast);
+}
+
+.container {
+  max-width: 1350px;
+  margin: 2rem auto;
+  width: 100%;
+  padding: 0 1.5rem;
+  flex: 1;
+}
+
+.statusBanner {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.statusDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+.dotHealthy {
+  background-color: #13653f;
+  box-shadow: 0 0 12px rgba(19, 101, 63, 0.5);
+}
+
+.dotDegraded {
+  background-color: #d97706;
+  box-shadow: 0 0 12px rgba(217, 119, 6, 0.5);
+}
+
+.dotUnhealthy {
+  background-color: #dc2626;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.5);
+}
+
+.statusTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.2rem;
+}
+
+.statusSubtitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.refreshBtn {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metricCard {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+}
+
+.metricCardTitle {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.metricMainValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.metricSubText {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.progressBarContainer {
+  background-color: var(--color-bg-subtle);
+  border-radius: var(--radius-full);
+  height: 8px;
+  overflow: hidden;
+  margin: 0.75rem 0;
+}
+
+.progressBarFill {
+  background-color: var(--color-primary);
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal);
+}
+
+.logCard {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.logCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.logCardTitle {
+  font-size: 1.2rem;
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.logTerminal {
+  background-color: #0b1714;
+  color: #a7f3d0;
+  padding: 1.25rem;
+  border-radius: var(--radius-md);
+  font-family: monospace;
+  font-size: 0.82rem;
+  max-height: 420px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.logLine {
+  margin-bottom: 0.65rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.4rem;
+}
+
+.logLevelInfo {
+  color: #34d399;
+}
+
+.logLevelWarn {
+  color: #fbbf24;
+}
+
+.logLevelError {
+  color: #f87171;
+}
+
+.logTime {
+  color: #9ca3af;
+  margin-right: 0.5rem;
+}
+
+.logReqId {
+  color: #6ee7b7;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}

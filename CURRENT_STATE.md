@@ -1,7 +1,7 @@
 # TRẠNG THÁI HIỆN TẠI CỦA DỰ ÁN (CURRENT_STATE.MD)
 
 **Cập nhật lần cuối:** 2026-10-13  
-**Giai đoạn hiện tại:** Giai đoạn 8 — Dịch vụ Vận chuyển & Điều phối Chuyến đi (Hoàn thành 100%, sẵn sàng cho Giai đoạn 9)
+**Giai đoạn hiện tại:** Giai đoạn 9 — Quan sát, Chỉ số & Khôi phục Thảm họa (Hoàn thành 100%, sẵn sàng cho Giai đoạn 10)
 
 ---
 
@@ -22,25 +22,26 @@
 - [x] **Giai đoạn 5 (Booking API & Idempotency Engine):**
   - Idempotency-Key chống double-booking, readable codes `AN-YYYYMM-XXXX`, state machine.
 - [x] **Giai đoạn 6 (Customer UI & Luxury Design System):**
-  - Tokens Deep Emerald & Champagne Gold, SearchBar, RoomCard, BookingModal.
+  - Tokens Deep Emerald & Champagne Gold, SearchBar, RoomCard, BookingModal, tách riêng CSS Modules 1:1.
 - [x] **Giai đoạn 7 (Nghiệp vụ Lễ tân & Vận hành Quầy):**
   - Gán phòng vật lý khi Check-in (`BOOK-07`), thu tiền quầy & công nợ (`BIZ-01`), check-out sớm & audit trail (`BIZ-02`), Dashboard Lễ tân với CSS Module riêng.
-- [x] **Roadmap Giai đoạn 8 (Dịch vụ Vận chuyển & Điều phối Chuyến đi):**
-  - Xây dựng Transport Adapter Interface (`ITransportAdapter`) và Mock Provider Adapter Sandbox (`MockTransportSandboxAdapter`) với đơn giá mẫu chuẩn mực `4.000 VND/km` (tuân thủ Decision Rule 5).
-  - Xây dựng `TransportService` ([src/server/services/transport.service.ts](file:///d:/resort/src/server/services/transport.service.ts)):
-    - Tổng hợp thống kê chuyến xe (chờ phân xe, đã gán, đang đón, hoàn thành).
-    - Phân công tài xế (`assignDriver`) và xác thực role `DRIVER`.
-    - Máy trạng thái vòng đời chuyến (`REQUESTED` $\rightarrow$ `ASSIGNED` $\rightarrow$ `IN_TRANSIT` $\rightarrow$ `COMPLETED`).
-    - Giả lập lộ trình GPS xe điện di chuyển từ sân bay về resort (`simulateVehiclePing`).
-  - Xây dựng các Route Handlers:
-    - `GET /api/transport/rides`: Danh sách chuyến xe, tổng quan số liệu và danh sách tài xế.
-    - `POST /api/transport/assign`: Điều phối viên phân tài xế cho chuyến xe.
-    - `POST /api/transport/status`: Cập nhật trạng thái chuyến xe (đang đón, hoàn thành).
-    - `POST /api/transport/simulate-ping`: Cập nhật tọa độ GPS giả lập của xe.
-  - Xây dựng Màn hình Điều phối viên ([src/app/transport/dispatch/page.tsx](file:///d:/resort/src/app/transport/dispatch/page.tsx)) kèm CSS Module [dispatch.module.css](file:///d:/resort/src/app/transport/dispatch/dispatch.module.css).
-  - Xây dựng Màn hình Tài xế Mobile Web ([src/app/transport/driver/page.tsx](file:///d:/resort/src/app/transport/driver/page.tsx)) kèm CSS Module [driver.module.css](file:///d:/resort/src/app/transport/driver/driver.module.css).
-  - Bộ kiểm thử Mock Adapter Sandbox [tests/transport-mock.test.mjs](file:///d:/resort/tests/transport-mock.test.mjs): 5/5 tests PASS.
-  - Toàn bộ hệ thống: **31/31 test cases PASS (100%)**, Next.js build hoàn thành **22/22 routes**.
+- [x] **Giai đoạn 8 (Dịch vụ Vận chuyển & Điều phối Chuyến đi):**
+  - Mock Provider Sandbox Adapter `4.000 VND/km` (Decision Rule 5), Dispatcher Dashboard, Driver Mobile Web View.
+- [x] **Roadmap Giai đoạn 9 (Quan sát, Chỉ số & Khôi phục Thảm họa):**
+  - Nâng cấp Structured JSON Logging ([src/server/lib/logger.ts](file:///d:/resort/src/server/lib/logger.ts)):
+    - Sinh mã `x-request-id` truy vết từng giao dịch end-to-end (`OBS-01`).
+    - Lưu trữ buffer xoay vòng log phục vụ hiển thị trực tiếp.
+  - Nâng cấp Endpoint Sức khỏe Hệ thống ([src/app/api/health/route.ts](file:///d:/resort/src/app/api/health/route.ts)):
+    - Thăm dò kết nối Database (`SELECT 1`), đo độ trễ truy vấn (`dbLatencyMs`).
+    - Đo lường bộ nhớ RAM (RSS, Heap Used, Heap Total) và thời gian hoạt động Uptime (`OBS-02`).
+    - Đánh giá trạng thái tự động: `HEALTHY`, `DEGRADED` (khi latency $> 500$ms), `UNHEALTHY`.
+  - Xây dựng Dashboard Quản trị Sức khỏe Hệ thống ([src/app/admin/system-health/page.tsx](file:///d:/resort/src/app/admin/system-health/page.tsx)) kèm CSS Module [system-health.module.css](file:///d:/resort/src/app/admin/system-health/system-health.module.css).
+  - Tự động hóa Sao lưu & Phục hồi Cơ sở Dữ liệu (`REL-01`):
+    - [scripts/backup-db.ps1](file:///d:/resort/scripts/backup-db.ps1) & [scripts/backup-db.sh](file:///d:/resort/scripts/backup-db.sh): Dump dữ liệu nén kèm tính mã băm SHA-256 Checksum.
+    - [scripts/restore-db.ps1](file:///d:/resort/scripts/restore-db.ps1) & [scripts/restore-db.sh](file:///d:/resort/scripts/restore-db.sh): Phục hồi database có cờ bảo vệ an toàn.
+  - Tài liệu Diễn tập Khôi phục Thảm họa ([docs/disaster_recovery_runbook.md](file:///d:/resort/docs/disaster_recovery_runbook.md) - `REL-02`) cam kết $RTO \le 30$ phút, $RPO \le 1$ giờ và 3 bước audit toàn vẹn dữ liệu.
+  - Bộ kiểm thử Observability & Health [tests/observability-health.test.mjs](file:///d:/resort/tests/observability-health.test.mjs): 6/6 tests PASS.
+  - Toàn bộ hệ thống: **37/37 test cases PASS (100%)**, Next.js build hoàn thành **23/23 routes**.
 
 ---
 
@@ -48,36 +49,34 @@
 
 | File | Mô tả |
 | :--- | :--- |
-| [src/server/services/transport.service.ts](file:///d:/resort/src/server/services/transport.service.ts) | Service quản lý vận chuyển, Mock Adapter Sandbox (4.000 ₫/km), State Machine |
-| [src/app/api/transport/rides/route.ts](file:///d:/resort/src/app/api/transport/rides/route.ts) | API danh sách chuyến xe, tài xế và thống kê điều phối |
-| [src/app/api/transport/assign/route.ts](file:///d:/resort/src/app/api/transport/assign/route.ts) | API phân tài xế cho chuyến xe đưa đón |
-| [src/app/api/transport/status/route.ts](file:///d:/resort/src/app/api/transport/status/route.ts) | API cập nhật trạng thái vòng đời chuyến xe |
-| [src/app/api/transport/simulate-ping/route.ts](file:///d:/resort/src/app/api/transport/simulate-ping/route.ts) | API giả lập cập nhật tọa độ GPS xe trên bản đồ |
-| [src/app/transport/dispatch/page.tsx](file:///d:/resort/src/app/transport/dispatch/page.tsx) | Dashboard Điều phối viên (Dispatcher Fleet Management) |
-| [src/app/transport/dispatch/dispatch.module.css](file:///d:/resort/src/app/transport/dispatch/dispatch.module.css) | Tệp CSS Module chuyên biệt cho Dashboard Điều phối |
-| [src/app/transport/driver/page.tsx](file:///d:/resort/src/app/transport/driver/page.tsx) | Màn hình Tài xế Mobile Web (Driver Mission Portal) |
-| [src/app/transport/driver/driver.module.css](file:///d:/resort/src/app/transport/driver/driver.module.css) | Tệp CSS Module chuyên biệt cho Màn hình Tài xế |
-| [tests/transport-mock.test.mjs](file:///d:/resort/tests/transport-mock.test.mjs) | Bộ kiểm thử Mock Provider Adapter Sandbox và State Machine |
-| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 8 |
+| [src/server/lib/logger.ts](file:///d:/resort/src/server/lib/logger.ts) | Nâng cấp Structured JSON Logger, HTTP request tracing, in-memory log buffer |
+| [src/app/api/health/route.ts](file:///d:/resort/src/app/api/health/route.ts) | Endpoint kiểm tra sức khỏe hệ thống, probe database latency, RAM usage |
+| [src/app/admin/system-health/page.tsx](file:///d:/resort/src/app/admin/system-health/page.tsx) | Dashboard Quản trị Sức khỏe & Quan sát hệ thống (System Health & Observability) |
+| [src/app/admin/system-health/system-health.module.css](file:///d:/resort/src/app/admin/system-health/system-health.module.css) | Tệp CSS Module chuyên biệt cho Dashboard Quản trị Sức khỏe |
+| [scripts/backup-db.ps1](file:///d:/resort/scripts/backup-db.ps1) & [.sh](file:///d:/resort/scripts/backup-db.sh) | Script sao lưu cơ sở dữ liệu tự động kèm mã SHA-256 Checksum |
+| [scripts/restore-db.ps1](file:///d:/resort/scripts/restore-db.ps1) & [.sh](file:///d:/resort/scripts/restore-db.sh) | Script phục hồi cơ sở dữ liệu khẩn cấp |
+| [docs/disaster_recovery_runbook.md](file:///d:/resort/docs/disaster_recovery_runbook.md) | Sổ tay hướng dẫn diễn tập phục hồi thảm họa dữ liệu ($RTO \le 30$ phút, $RPO \le 1$ giờ) |
+| [tests/observability-health.test.mjs](file:///d:/resort/tests/observability-health.test.mjs) | Bộ kiểm thử Logging có cấu trúc, Health probe và xác thực Checksum |
+| [CURRENT_STATE.md](file:///d:/resort/CURRENT_STATE.md) & [TASKS.md](file:///d:/resort/TASKS.md) | Cập nhật tiến độ và bằng chứng kiểm thử Giai đoạn 9 |
 
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Full System Test Suites:** 5 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`) $\rightarrow$ **31/31 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ **22/22 routes biên dịch thành công**.
+- **Full System Test Suites:** 6 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`) $\rightarrow$ **37/37 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ **23/23 routes biên dịch thành công**.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Cần bổ sung Structured JSON Logging với truy vết `request_id`, cảnh báo quá tải Connection Pool và Disaster Recovery Runbook (Giai đoạn 9).
+- Cần bổ sung Security Hardening, Rate Limiting chống brute-force và k6 load test scenarios (Giai đoạn 10).
 
 ---
 
 ## 5. NHIỆM VỤ TIẾP THEO
 
-- **Roadmap Giai đoạn 9: Quan sát, Chỉ số & Khôi phục Thảm họa (`OBS-01`, `OBS-02`, `REL-01`, `REL-02`):**
-  - Tích hợp Correlation/Request Tracing ID xuyên suốt vòng đời API.
-  - Endpoint `/api/health` giám sát độ khả dụng cơ sở dữ liệu và dung lượng connection pool.
-  - Kịch bản sao lưu tự động & tài liệu diễn tập phục hồi dữ liệu thảm họa (Disaster Recovery Runbook).
+- **Roadmap Giai đoạn 10: Tăng cường Bảo mật, Rate Limiting & Kiểm thử Tải (`SEC-05`, `SEC-06`, `TEST-01`, `TEST-02`, `TEST-03`):**
+  - Security Headers (CSP, X-Frame-Options, HSTS).
+  - Rate limiting cho các endpoint nhạy cảm (`/api/auth/login`, `/api/bookings`).
+  - Kịch bản k6 kiểm thử tải mô phỏng traffic tìm kiếm và tranh chấp đặt phòng đồng thời với số liệu $p95, p99$ thực tế.
