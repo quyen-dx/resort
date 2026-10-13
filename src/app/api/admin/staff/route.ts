@@ -73,14 +73,32 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!email || typeof email !== 'string' || !email.includes('@')) {
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email || typeof email !== 'string' || !EMAIL_REGEX.test(email.trim())) {
       return NextResponse.json(
-        { success: false, error: 'Email không hợp lệ.' },
+        { success: false, error: 'Định dạng email/gmail không hợp lệ. Ví dụ: nhanvien@resort.com hoặc ten@gmail.com' },
         { status: 400 }
       );
     }
 
     const cleanEmail = email.trim().toLowerCase();
+
+    // Phone validation & format
+    let cleanPhone: string | null = null;
+    if (phoneNumber && typeof phoneNumber === 'string' && phoneNumber.trim().length > 0) {
+      const sanitized = phoneNumber.trim().replace(/[\s.-]/g, '');
+      const PHONE_REGEX = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+      if (!PHONE_REGEX.test(sanitized)) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam 10 chữ số (ví dụ: 0912345678 hoặc 0387654321).',
+          },
+          { status: 400 }
+        );
+      }
+      cleanPhone = sanitized;
+    }
 
     // Role validation: Must be a staff role, definitely not CUSTOMER
     if (!role || !ALLOWED_STAFF_ROLES.includes(role as UserRole)) {
@@ -100,16 +118,33 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. Check email uniqueness
-    const existingUser = await db.user.findUnique({
+    // 2. Check email uniqueness (chống trùng Email/Gmail)
+    const existingByEmail = await db.user.findUnique({
       where: { email: cleanEmail },
     });
 
-    if (existingUser) {
+    if (existingByEmail) {
       return NextResponse.json(
-        { success: false, error: 'Email này đã được sử dụng bởi một tài khoản khác trong hệ thống.' },
+        { success: false, error: `Email/Gmail "${cleanEmail}" đã được sử dụng bởi một tài khoản khác trong hệ thống.` },
         { status: 409 }
       );
+    }
+
+    // 3. Check phone number uniqueness (chống trùng Số điện thoại)
+    if (cleanPhone) {
+      const existingByPhone = await db.user.findFirst({
+        where: { phoneNumber: cleanPhone },
+      });
+
+      if (existingByPhone) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Số điện thoại "${cleanPhone}" đã được đăng ký bởi tài khoản nhân viên khác (${existingByPhone.fullName}).`,
+          },
+          { status: 409 }
+        );
+      }
     }
 
     // 3. Hash password
@@ -120,7 +155,7 @@ export async function POST(req: NextRequest) {
       data: {
         fullName: fullName.trim(),
         email: cleanEmail,
-        phoneNumber: phoneNumber ? phoneNumber.trim() : null,
+        phoneNumber: cleanPhone,
         role: role as UserRole,
         passwordHash,
         isActive: Boolean(isActive),

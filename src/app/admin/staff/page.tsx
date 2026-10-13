@@ -70,6 +70,7 @@ export default function AdminStaffPage() {
 
   const [deletingStaff, setDeletingStaff] = useState<StaffItem | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [modalError, setModalError] = useState<string | null>(null);
 
   const fetchStaff = useCallback(async () => {
     try {
@@ -129,6 +130,24 @@ export default function AdminStaffPage() {
   // Handle Create
   const handleCreateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setModalError(null);
+
+    // Client-side format validation
+    const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!EMAIL_REGEX.test(createForm.email.trim())) {
+      setModalError('Định dạng Email/Gmail không hợp lệ. Vui lòng nhập đúng (ví dụ: letan@resort.com hoặc ten@gmail.com).');
+      return;
+    }
+
+    if (createForm.phoneNumber.trim()) {
+      const cleanPhone = createForm.phoneNumber.trim().replace(/[\s.-]/g, '');
+      const PHONE_REGEX = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+      if (!PHONE_REGEX.test(cleanPhone)) {
+        setModalError('Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam 10 chữ số (ví dụ: 0912345678).');
+        return;
+      }
+    }
+
     try {
       setActionLoading(true);
       setFeedbackMsg(null);
@@ -140,7 +159,8 @@ export default function AdminStaffPage() {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Tạo nhân viên thất bại');
+        setModalError(data.error || 'Tạo nhân viên thất bại');
+        return;
       }
 
       setFeedbackMsg({ type: 'success', text: `Đã tạo tài khoản cho ${createForm.fullName} thành công.` });
@@ -156,7 +176,7 @@ export default function AdminStaffPage() {
       await fetchStaff();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lỗi hệ thống';
-      setFeedbackMsg({ type: 'error', text: msg });
+      setModalError(msg);
     } finally {
       setActionLoading(false);
     }
@@ -173,6 +193,7 @@ export default function AdminStaffPage() {
       password: '',
       isActive: staff.isActive,
     });
+    setModalError(null);
     setFeedbackMsg(null);
     setIsEditOpen(true);
   };
@@ -180,6 +201,17 @@ export default function AdminStaffPage() {
   // Handle Edit Submit
   const handleEditSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setModalError(null);
+
+    if (editForm.phoneNumber.trim()) {
+      const cleanPhone = editForm.phoneNumber.trim().replace(/[\s.-]/g, '');
+      const PHONE_REGEX = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+      if (!PHONE_REGEX.test(cleanPhone)) {
+        setModalError('Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam 10 chữ số (ví dụ: 0912345678).');
+        return;
+      }
+    }
+
     try {
       setActionLoading(true);
       setFeedbackMsg(null);
@@ -197,7 +229,8 @@ export default function AdminStaffPage() {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        throw new Error(data.error || 'Cập nhật nhân viên thất bại');
+        setModalError(data.error || 'Cập nhật nhân viên thất bại');
+        return;
       }
 
       setFeedbackMsg({ type: 'success', text: `Cập nhật thông tin nhân viên ${editForm.fullName} thành công.` });
@@ -205,7 +238,7 @@ export default function AdminStaffPage() {
       await fetchStaff();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Lỗi hệ thống';
-      setFeedbackMsg({ type: 'error', text: msg });
+      setModalError(msg);
     } finally {
       setActionLoading(false);
     }
@@ -503,6 +536,7 @@ export default function AdminStaffPage() {
             </div>
             <form onSubmit={handleCreateSubmit}>
               <div className={styles.modalBody}>
+                {modalError && <div className={styles.alertError}>{modalError}</div>}
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Họ và Tên Nhân Viên *</label>
                   <input
@@ -616,6 +650,7 @@ export default function AdminStaffPage() {
             </div>
             <form onSubmit={handleEditSubmit}>
               <div className={styles.modalBody}>
+                {modalError && <div className={styles.alertError}>{modalError}</div>}
                 <div className={styles.formGroup}>
                   <label className={styles.formLabel}>Họ và Tên Nhân Viên</label>
                   <input

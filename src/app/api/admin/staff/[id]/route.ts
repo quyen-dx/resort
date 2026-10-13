@@ -121,7 +121,40 @@ export async function PUT(
     }
 
     if (phoneNumber !== undefined) {
-      updateData.phoneNumber = phoneNumber ? phoneNumber.trim() : null;
+      if (phoneNumber && typeof phoneNumber === 'string' && phoneNumber.trim().length > 0) {
+        const sanitized = phoneNumber.trim().replace(/[\s.-]/g, '');
+        const PHONE_REGEX = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
+        if (!PHONE_REGEX.test(sanitized)) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: 'Số điện thoại không hợp lệ. Vui lòng nhập số điện thoại Việt Nam 10 chữ số (ví dụ: 0912345678).',
+            },
+            { status: 400 }
+          );
+        }
+
+        // Check duplicate phone against other users
+        const duplicatePhone = await db.user.findFirst({
+          where: {
+            phoneNumber: sanitized,
+            id: { not: id },
+          },
+        });
+
+        if (duplicatePhone) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: `Số điện thoại "${sanitized}" đã được sử dụng bởi nhân viên khác (${duplicatePhone.fullName}).`,
+            },
+            { status: 409 }
+          );
+        }
+        updateData.phoneNumber = sanitized;
+      } else {
+        updateData.phoneNumber = null;
+      }
     }
 
     if (role) {
