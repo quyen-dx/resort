@@ -40,3 +40,4 @@ Thumbs.db
 
 # Antigravity artifacts & scratch
 .agents/scratch/
+.~lock.*

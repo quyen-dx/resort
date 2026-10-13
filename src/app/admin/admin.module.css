@@ -1,0 +1,275 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.titleArea h1 {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #c5a880;
+  margin: 0 0 6px 0;
+}
+
+.titleArea p {
+  font-size: 13px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.refreshBtn {
+  background: rgba(197, 168, 128, 0.15);
+  border: 1px solid rgba(197, 168, 128, 0.35);
+  color: #c5a880;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refreshBtn:hover {
+  background: rgba(197, 168, 128, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Stats Grid */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+}
+
+.statCard {
+  background: rgba(15, 42, 36, 0.65);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.statCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(197, 168, 128, 0.45);
+}
+
+.statHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a0aec0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.statIcon {
+  font-size: 18px;
+}
+
+.statValue {
+  font-size: 26px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.statSubtext {
+  font-size: 11px;
+  color: #718096;
+}
+
+/* Shortcuts */
+.shortcutsRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.shortcutBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: #e2e8f0;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.shortcutBtn:hover {
+  background: rgba(197, 168, 128, 0.18);
+  border-color: rgba(197, 168, 128, 0.4);
+  color: #c5a880;
+  transform: translateY(-1px);
+}
+
+/* Two Column Layout */
+.dashboardGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+.cardSection {
+  background: rgba(15, 42, 36, 0.65);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: #c5a880;
+  margin: 0;
+}
+
+.viewAllLink {
+  color: #a0aec0;
+  font-size: 12px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.viewAllLink:hover {
+  color: #c5a880;
+}
+
+/* Table */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.table th {
+  padding: 10px 12px;
+  color: #a0aec0;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+.bookingCode {
+  font-family: monospace;
+  font-weight: 700;
+  color: #c5a880;
+}
+
+.guestInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.guestName {
+  font-weight: 600;
+  color: #fff;
+}
+
+.guestPhone {
+  font-size: 11px;
+  color: #718096;
+}
+
+/* Pending Rides List */
+.pendingList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pendingItem {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pendingItemHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.rideCode {
+  font-family: monospace;
+  font-weight: 700;
+  font-size: 12px;
+  color: #c5a880;
+}
+
+.passengerName {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.routeText {
+  font-size: 11px;
+  color: #a0aec0;
+}
+
+.loadingBox {
+  padding: 60px;
+  text-align: center;
+  color: #a0aec0;
+  font-size: 14px;
+}
+
+.errorBox {
+  background: rgba(229, 62, 62, 0.2);
+  border: 1px solid rgba(229, 62, 62, 0.4);
+  color: #fed7d7;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,136 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titleArea h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #c5a880;
+  margin: 0 0 4px 0;
+}
+
+.titleArea p {
+  font-size: 13px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.roomCard {
+  background: rgba(15, 42, 36, 0.65);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.roomCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(197, 168, 128, 0.45);
+}
+
+.roomCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.roomNumber {
+  font-size: 20px;
+  font-weight: 800;
+  color: #c5a880;
+  letter-spacing: 0.5px;
+}
+
+.statusBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.statusAvailable {
+  background: rgba(72, 187, 120, 0.2);
+  color: #68d391;
+  border: 1px solid rgba(72, 187, 120, 0.35);
+}
+
+.statusOccupied {
+  background: rgba(66, 153, 225, 0.2);
+  color: #63b3ed;
+  border: 1px solid rgba(66, 153, 225, 0.35);
+}
+
+.statusMaintenance {
+  background: rgba(237, 137, 54, 0.2);
+  color: #f6ad55;
+  border: 1px solid rgba(237, 137, 54, 0.35);
+}
+
+.statusCleaning {
+  background: rgba(159, 122, 234, 0.2);
+  color: #b794f4;
+  border: 1px solid rgba(159, 122, 234, 0.35);
+}
+
+.roomTypeInfo {
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.roomMeta {
+  font-size: 12px;
+  color: #a0aec0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.filterBar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #a0aec0;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filterBtnActive {
+  background: rgba(197, 168, 128, 0.2);
+  border-color: rgba(197, 168, 128, 0.5);
+  color: #c5a880;
+  font-weight: 600;
+}
+
+.loadingBox {
+  padding: 60px;
+  text-align: center;
+  color: #a0aec0;
+}

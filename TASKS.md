@@ -208,3 +208,32 @@ Mỗi lần chỉ thực hiện một nhiệm vụ hoặc một nhóm thay đổ
     - Biên bản Ký duyệt chính thức trong [docs/production_release_checklist.md](file:///d:/resort/docs/production_release_checklist.md).
     - 43/43 Automated tests PASS; 23/23 Next.js routes biên dịch thành công; Docker containerized deployment sẵn sàng.
 
+---
+
+## GIAI ĐOẠN 12: TÁI CẤU TRÚC ROUTE ADMIN & TRANG QUẢN TRỊ CHÍNH TẠI /admin
+- [x] **TASK-12.1: Tái cấu trúc Route Admin & Dashboard Quản trị Nghiệp vụ Resort**
+  - **Requirement IDs:** `OPS-01`, `SEC-03`, `BIZ-01`, `BOOK-01`, `MAP-01`
+  - **Mô tả:**
+    - Tạo trang Dashboard Quản trị Resort chính tại `/admin` (tiêu đề "Quản trị Resort", thống kê real-time từ PostgreSQL, danh sách đặt phòng gần đây, chuyến xe đang chờ).
+    - Tạo Admin Layout dùng chung (`src/app/admin/layout.tsx` + `admin-layout.module.css`) với Sidebar cố định 8 mục (Tổng quan, Quản lý phòng, Quản lý loại phòng, Quản lý đặt phòng, Quản lý khách hàng, Quản lý nhân viên, Điều phối xe, Giám sát hệ thống), header hiển thị tiêu đề trang và tài khoản admin, nút đăng xuất.
+    - Giữ `/admin/system-health` làm trang con tích hợp bên trong Admin Layout chung.
+    - Xây dựng 7 phân hệ con với giao diện và Backend API riêng biệt, bảo vệ tuyệt đối bằng vai trò ADMIN:
+      - `/admin/rooms` + `/api/admin/rooms`
+      - `/admin/room-types` + `/api/admin/room-types`
+      - `/admin/bookings` + `/api/admin/bookings`
+      - `/admin/customers` + `/api/admin/customers`
+      - `/admin/staff` + `/api/admin/staff`
+      - `/admin/transfers` + `/api/admin/transfers`
+      - `/admin/system-health`
+  - **Tiêu chí nghiệm thu:**
+    - Truy cập `/admin` hiển thị Dashboard quản trị thật với dữ liệu từ PostgreSQL.
+    - Sidebar gồm 8 mục hoạt động thật, hiển thị trạng thái đang chọn, không trỏ tất cả về system-health.
+    - Phân quyền RBAC server-side & middleware chặn người dùng không có vai trò ADMIN khi gõ URL trực tiếp.
+    - 65/65 automated test cases PASS; `npm run build` biên dịch 40/40 routes thành công.
+  - **Trạng thái:** Hoàn thành.
+  - **Files Changed:** `src/middleware.ts`, `src/app/admin/layout.tsx`, `src/app/admin/admin-layout.module.css`, `src/app/admin/page.tsx`, `src/app/admin/admin.module.css`, `src/app/admin/system-health/page.tsx`, `src/app/admin/rooms/*`, `src/app/admin/room-types/*`, `src/app/admin/bookings/*`, `src/app/admin/customers/*`, `src/app/admin/staff/*`, `src/app/admin/transfers/*`, `src/app/api/admin/*`, `tests/admin-dashboard.test.mjs`.
+  - **Test Evidence:**
+    - 65/65 automated tests PASS trong 18 suites (Node test runner).
+    - `npm run build` biên dịch thành công toàn bộ 40 routes không có bất kỳ lỗi TypeScript/Next.js nào.
+
+

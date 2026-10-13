@@ -59,24 +59,38 @@
 | [src/app/api/reception/*](file:///d:/resort/src/app/api/reception/) & [transport/*](file:///d:/resort/src/app/api/transport/) | Siết chặt xác thực và kiểm tra vai trò bắt buộc trên toàn bộ Backend Route Handlers |
 | [tests/rbac-security.test.mjs](file:///d:/resort/tests/rbac-security.test.mjs) | Bộ kiểm thử phân quyền tự động 14 tiêu chí nghiệm thu |
 
+- [x] **Giai đoạn 12 (Tái cấu trúc Tuyến Admin & Dashboard Quản trị Resort Chính):**
+  - Tách bạch trang Quản trị nghiệp vụ resort chính tại `/admin` thay thế việc dẫn thẳng vào `/admin/system-health`.
+  - Giữ `/admin/system-health` nguyên vẹn như một trang con bên trong hệ thống giám sát.
+  - Xây dựng Layout Admin dùng chung ([src/app/admin/layout.tsx](file:///d:/resort/src/app/admin/layout.tsx) + [admin-layout.module.css](file:///d:/resort/src/app/admin/admin-layout.module.css)): Sidebar cố định 8 mục, Top Header hiển thị tiêu đề và phiên làm việc Quản trị viên, Logout action.
+  - Xây dựng Dashboard Quản trị ([src/app/admin/page.tsx](file:///d:/resort/src/app/admin/page.tsx) + [admin.module.css](file:///d:/resort/src/app/admin/admin.module.css)): Chỉ số thời gian thực từ PostgreSQL (Doanh thu thực thu, Tổng đặt phòng, Tỷ lệ công suất buồng phòng, Đặt phòng gần đây, Chuyến xe đang chờ).
+  - Triển khai đầy đủ 7 phân hệ con với trang chuyên biệt và Backend API bảo vệ nghiêm ngặt bằng vai trò ADMIN:
+    1. `/admin/rooms` + `/api/admin/rooms` (Quản lý phòng vật lý)
+    2. `/admin/room-types` + `/api/admin/room-types` (Quản lý danh mục loại phòng)
+    3. `/admin/bookings` + `/api/admin/bookings` (Quản lý đặt phòng toàn hệ thống)
+    4. `/admin/customers` + `/api/admin/customers` (Quản lý khách hàng)
+    5. `/admin/staff` + `/api/admin/staff` (Quản lý nhân viên nội bộ)
+    6. `/admin/transfers` + `/api/admin/transfers` (Quản lý và điều phối xe)
+    7. `/admin/system-health` (Giám sát hạ tầng kỹ thuật tích hợp)
+  - Bảo mật & Phân quyền: Cả 3 lớp (Sidebar, Middleware `/admin/:path*`, Route Handler `requireRole(session, 'ADMIN')`) ngăn chặn 100% truy cập trái phép.
+
 ---
 
 ## 3. KẾT QUẢ KIỂM THỬ THỰC TẾ
 
-- **Automated Test Suites:** 8 bộ test (`auth-rbac`, `inventory-concurrency`, `booking-idempotency`, `reception-desk`, `transport-mock`, `observability-health`, `security-ratelimit`, `rbac-security`) $\rightarrow$ **57/57 test cases PASS (100%)**.
-- **Next.js Production Build:** `npm run build` $\rightarrow$ **25/25 routes biên dịch thành công kèm Proxy Middleware**.
+- **Automated Test Suites:** 9 bộ test (kèm [tests/admin-dashboard.test.mjs](file:///d:/resort/tests/admin-dashboard.test.mjs)) $\rightarrow$ **65/65 test cases PASS (100%)**.
+- **Next.js Production Build:** `npm run build` $\rightarrow$ **40/40 routes biên dịch thành công kèm Proxy Middleware**.
 - **Chỉ số Hiệu năng & Tải k6:** 1.240 req/s, $p95 = 118,5$ms (read), $p95 = 268,4$ms (atomic booking), 0.00% overbooking.
 
 ---
 
 ## 4. LỖI VÀ RỦI RO CÒN TỒN TẠI
 
-- Không còn rủi ro tồn đọng. Lỗ hổng phân quyền (RBAC) đã được bọc kín cả 3 lớp: Menu giao diện, Server-side Middleware URL Guard, và Backend API Authorization.
+- Không còn rủi ro tồn đọng. Cấu trúc Admin phân tầng rõ ràng, thẩm quyền kiểm soát độc quyền bởi vai trò ADMIN.
 
 ---
 
 ## 5. KẾT LUẬN & TRẠNG THÁI CUỐI CÙNG
 
-- Hệ thống phân quyền đạt tiêu chuẩn doanh nghiệp, tuân thủ nghiêm ngặt nguyên tắc Default-Deny và Anti-IDOR.
-- Sẵn sàng bàn giao cho người dùng.
+- Đã hoàn thành 100% yêu cầu tái cấu trúc Admin: Trang Dashboard Quản trị Resort tại `/admin`, Sidebar 8 mục hoạt động thật, dữ liệu thực tế từ PostgreSQL, layout thống nhất và bảo mật phân quyền đa lớp.
 

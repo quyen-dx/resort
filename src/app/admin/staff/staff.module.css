@@ -1,0 +1,89 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleArea h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #c5a880;
+  margin: 0 0 4px 0;
+}
+
+.titleArea p {
+  font-size: 13px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.cardSection {
+  background: rgba(15, 42, 36, 0.65);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.table th {
+  padding: 12px 14px;
+  color: #a0aec0;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+.roleBadge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  letter-spacing: 0.5px;
+}
+
+.roleAdmin {
+  background: rgba(229, 62, 62, 0.2);
+  color: #fc8181;
+  border: 1px solid rgba(229, 62, 62, 0.4);
+}
+
+.roleReceptionist {
+  background: rgba(66, 153, 225, 0.2);
+  color: #63b3ed;
+  border: 1px solid rgba(66, 153, 225, 0.4);
+}
+
+.roleDispatcher {
+  background: rgba(237, 137, 54, 0.2);
+  color: #f6ad55;
+  border: 1px solid rgba(237, 137, 54, 0.4);
+}
+
+.roleDriver {
+  background: rgba(72, 187, 120, 0.2);
+  color: #68d391;
+  border: 1px solid rgba(72, 187, 120, 0.4);
+}
+
+.loadingBox {
+  padding: 60px;
+  text-align: center;
+  color: #a0aec0;
+}

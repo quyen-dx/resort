@@ -1,0 +1,102 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.titleArea h1 {
+  font-size: 22px;
+  font-weight: 800;
+  color: #c5a880;
+  margin: 0 0 4px 0;
+}
+
+.titleArea p {
+  font-size: 13px;
+  color: #a0aec0;
+  margin: 0;
+}
+
+.cardSection {
+  background: rgba(15, 42, 36, 0.65);
+  border: 1px solid rgba(197, 168, 128, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+}
+
+.table th {
+  padding: 12px 14px;
+  color: #a0aec0;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.table td {
+  padding: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+}
+
+.bookingCode {
+  font-family: monospace;
+  font-weight: 700;
+  color: #c5a880;
+}
+
+.guestInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.guestName {
+  font-weight: 600;
+  color: #fff;
+}
+
+.guestPhone {
+  font-size: 11px;
+  color: #718096;
+}
+
+.guestEmail {
+  font-size: 11px;
+  color: #a0aec0;
+}
+
+.loadingBox {
+  padding: 60px;
+  text-align: center;
+  color: #a0aec0;
+}
+
+.statusConfirmed {
+  color: #68d391;
+  font-weight: 600;
+}
+
+.statusCheckedIn {
+  color: #63b3ed;
+  font-weight: 600;
+}
+
+.statusCheckedOut {
+  color: #a0aec0;
+  font-weight: 600;
+}
+
+.statusCancelled {
+  color: #fc8181;
+  font-weight: 600;
+}

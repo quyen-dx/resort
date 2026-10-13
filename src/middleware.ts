@@ -71,9 +71,14 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
+    '/admin',
     '/admin/:path*',
+    '/reception',
     '/reception/:path*',
+    '/transport/dispatch',
     '/transport/dispatch/:path*',
+    '/transport/driver',
     '/transport/driver/:path*',
   ],
 };
+

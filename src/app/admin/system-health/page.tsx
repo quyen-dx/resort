@@ -80,28 +80,29 @@ export default function SystemHealthDashboard() {
     : 0;
 
   return (
-    <div className={styles.pageWrapper}>
-      {/* Top Header */}
-      <header className={styles.header}>
-        <div className={styles.brandGroup}>
-          <Link href="/" className={styles.brandLink}>
-            AN NAM RESORT
-          </Link>
-          <span className={styles.divider}>|</span>
-          <span className={styles.headerTitle}>Hệ Thống Giám Sát &amp; Sức Khỏe Máy Chủ (Observability)</span>
+    <div className={styles.container}>
+      {/* Subpage Breadcrumb / Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+        <div>
+          <h2 style={{ color: '#c5a880', margin: '0 0 4px 0', fontSize: '1.25rem' }}>
+            Giám Sát Hạ Tầng &amp; Sức Khỏe Kỹ Thuật (Observability)
+          </h2>
+          <span style={{ color: '#a0aec0', fontSize: '0.85rem' }}>
+            Kiểm tra thời gian thực kết nối PostgreSQL, bộ nhớ Node.js và nhật ký request
+          </span>
         </div>
-
-        <div className={styles.navGroup}>
-          <Link href="/reception" className={styles.navButton}>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Link href="/admin" style={{ color: '#c5a880', fontSize: '0.85rem', textDecoration: 'none', padding: '6px 12px', border: '1px solid rgba(197, 168, 128, 0.3)', borderRadius: '6px' }}>
+            ← Về Bảng Quản Trị
+          </Link>
+          <Link href="/reception" style={{ color: '#a0aec0', fontSize: '0.85rem', textDecoration: 'none', padding: '6px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }}>
             Quầy Lễ Tân →
           </Link>
-          <Link href="/transport/dispatch" className={styles.navButton}>
+          <Link href="/transport/dispatch" style={{ color: '#a0aec0', fontSize: '0.85rem', textDecoration: 'none', padding: '6px 12px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px' }}>
             Điều Phối Xe →
           </Link>
         </div>
-      </header>
-
-      <div className={styles.container}>
+      </div>
         {/* Status Banner */}
         <div className={styles.statusBanner}>
           <div className={styles.statusIndicator}>
@@ -215,6 +216,5 @@ export default function SystemHealthDashboard() {
           </div>
         </div>
       </div>
-    </div>
   );
 }
